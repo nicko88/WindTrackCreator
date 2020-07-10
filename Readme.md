@@ -5,7 +5,7 @@ WindTrackCreator is an application meant to help create wind tracks for the [HTF
 
 ### Screenshot
 
-
+<img src="https://user-images.githubusercontent.com/1866075/87112941-c6f01e80-c232-11ea-91e8-38a30c1317b1.png" width="549px" />
 
 ### Getting Started
 
