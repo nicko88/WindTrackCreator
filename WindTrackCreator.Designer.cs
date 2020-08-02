@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
@@ -39,6 +40,10 @@
             this.lblFilePath = new System.Windows.Forms.Label();
             this.lblCommandCount = new System.Windows.Forms.Label();
             this.gvCodes = new System.Windows.Forms.DataGridView();
+            this.TimeCode = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.FanSpeed = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Seek = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.Delete = new System.Windows.Forms.DataGridViewButtonColumn();
             this.rbMPC = new System.Windows.Forms.RadioButton();
             this.rbKodi = new System.Windows.Forms.RadioButton();
             this.tbIP = new System.Windows.Forms.TextBox();
@@ -52,12 +57,24 @@
             this.btnHIGH = new System.Windows.Forms.Button();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.tbHeader = new System.Windows.Forms.RichTextBox();
-            this.cbDarkMode = new System.Windows.Forms.CheckBox();
-            this.TimeCode = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.FanSpeed = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Seek = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.Delete = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.cbAutosave = new System.Windows.Forms.CheckBox();
+            this.cbHotkeys = new System.Windows.Forms.CheckBox();
+            this.tbUsername = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.btnFillHeader = new System.Windows.Forms.Button();
+            this.cbDarkmode = new System.Windows.Forms.CheckBox();
+            this.timerAutosave = new System.Windows.Forms.Timer(this.components);
+            this.lblSaved = new System.Windows.Forms.Label();
+            this.autosaveLabelUpdate = new System.ComponentModel.BackgroundWorker();
+            this.rbBluray = new System.Windows.Forms.RadioButton();
+            this.rbUHD = new System.Windows.Forms.RadioButton();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.label2 = new System.Windows.Forms.Label();
+            this.tbSpinup = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.tbSpindown = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.gvCodes)).BeginInit();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // openFileDialog
@@ -90,25 +107,29 @@
             // 
             // lblFilePath
             // 
-            this.lblFilePath.AutoSize = true;
+            this.lblFilePath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.lblFilePath.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblFilePath.Location = new System.Drawing.Point(92, 18);
+            this.lblFilePath.Location = new System.Drawing.Point(92, 8);
             this.lblFilePath.Name = "lblFilePath";
-            this.lblFilePath.Size = new System.Drawing.Size(0, 16);
+            this.lblFilePath.Size = new System.Drawing.Size(360, 32);
             this.lblFilePath.TabIndex = 3;
+            this.lblFilePath.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // lblCommandCount
             // 
             this.lblCommandCount.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblCommandCount.AutoSize = true;
-            this.lblCommandCount.Location = new System.Drawing.Point(9, 893);
+            this.lblCommandCount.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblCommandCount.Location = new System.Drawing.Point(9, 887);
             this.lblCommandCount.Name = "lblCommandCount";
-            this.lblCommandCount.Size = new System.Drawing.Size(0, 13);
+            this.lblCommandCount.Size = new System.Drawing.Size(0, 16);
             this.lblCommandCount.TabIndex = 4;
             // 
             // gvCodes
             // 
             this.gvCodes.AllowUserToDeleteRows = false;
+            this.gvCodes.AllowUserToResizeColumns = false;
             this.gvCodes.AllowUserToResizeRows = false;
             this.gvCodes.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
@@ -136,26 +157,58 @@
             dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.gvCodes.DefaultCellStyle = dataGridViewCellStyle4;
             this.gvCodes.EnableHeadersVisualStyles = false;
-            this.gvCodes.Location = new System.Drawing.Point(12, 174);
+            this.gvCodes.Location = new System.Drawing.Point(12, 207);
             this.gvCodes.MultiSelect = false;
             this.gvCodes.Name = "gvCodes";
             this.gvCodes.RowHeadersVisible = false;
-            this.gvCodes.Size = new System.Drawing.Size(523, 713);
+            this.gvCodes.Size = new System.Drawing.Size(523, 671);
             this.gvCodes.TabIndex = 5;
             this.gvCodes.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.gvCodes_CellContentClick);
             this.gvCodes.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.gvCodes_CellEndEdit);
             this.gvCodes.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.gvCodes_RowsAdded);
             // 
+            // TimeCode
+            // 
+            this.TimeCode.DataPropertyName = "TimeCode";
+            this.TimeCode.HeaderText = "Time Code";
+            this.TimeCode.Name = "TimeCode";
+            this.TimeCode.Width = 120;
+            // 
+            // FanSpeed
+            // 
+            this.FanSpeed.DataPropertyName = "FanSpeed";
+            this.FanSpeed.HeaderText = "Fan Speed";
+            this.FanSpeed.Name = "FanSpeed";
+            // 
+            // Seek
+            // 
+            this.Seek.DataPropertyName = "Seek";
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.NullValue = "Seek";
+            this.Seek.DefaultCellStyle = dataGridViewCellStyle2;
+            this.Seek.HeaderText = "Jump To Time";
+            this.Seek.Name = "Seek";
+            this.Seek.Text = "Seek";
+            this.Seek.Width = 105;
+            // 
+            // Delete
+            // 
+            this.Delete.DataPropertyName = "Delete";
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle3.NullValue = "Delete";
+            this.Delete.DefaultCellStyle = dataGridViewCellStyle3;
+            this.Delete.HeaderText = "Delete";
+            this.Delete.Name = "Delete";
+            this.Delete.Text = "Delete";
+            // 
             // rbMPC
             // 
             this.rbMPC.AutoSize = true;
-            this.rbMPC.Checked = true;
             this.rbMPC.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rbMPC.Location = new System.Drawing.Point(13, 44);
+            this.rbMPC.Location = new System.Drawing.Point(3, 4);
             this.rbMPC.Name = "rbMPC";
             this.rbMPC.Size = new System.Drawing.Size(100, 20);
             this.rbMPC.TabIndex = 6;
-            this.rbMPC.TabStop = true;
             this.rbMPC.Text = "MPC-HC/BE";
             this.rbMPC.UseVisualStyleBackColor = true;
             this.rbMPC.CheckedChanged += new System.EventHandler(this.rbMPC_CheckedChanged);
@@ -164,7 +217,7 @@
             // 
             this.rbKodi.AutoSize = true;
             this.rbKodi.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rbKodi.Location = new System.Drawing.Point(116, 44);
+            this.rbKodi.Location = new System.Drawing.Point(106, 4);
             this.rbKodi.Name = "rbKodi";
             this.rbKodi.Size = new System.Drawing.Size(53, 20);
             this.rbKodi.TabIndex = 7;
@@ -213,7 +266,7 @@
             // btnOFF
             // 
             this.btnOFF.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnOFF.Location = new System.Drawing.Point(12, 70);
+            this.btnOFF.Location = new System.Drawing.Point(11, 103);
             this.btnOFF.Name = "btnOFF";
             this.btnOFF.Size = new System.Drawing.Size(100, 26);
             this.btnOFF.TabIndex = 12;
@@ -225,7 +278,7 @@
             // btnECO
             // 
             this.btnECO.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnECO.Location = new System.Drawing.Point(118, 70);
+            this.btnECO.Location = new System.Drawing.Point(117, 103);
             this.btnECO.Name = "btnECO";
             this.btnECO.Size = new System.Drawing.Size(100, 26);
             this.btnECO.TabIndex = 13;
@@ -237,7 +290,7 @@
             // btnLOW
             // 
             this.btnLOW.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnLOW.Location = new System.Drawing.Point(224, 70);
+            this.btnLOW.Location = new System.Drawing.Point(223, 103);
             this.btnLOW.Name = "btnLOW";
             this.btnLOW.Size = new System.Drawing.Size(100, 26);
             this.btnLOW.TabIndex = 14;
@@ -249,7 +302,7 @@
             // btnMED
             // 
             this.btnMED.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnMED.Location = new System.Drawing.Point(330, 70);
+            this.btnMED.Location = new System.Drawing.Point(329, 103);
             this.btnMED.Name = "btnMED";
             this.btnMED.Size = new System.Drawing.Size(100, 26);
             this.btnMED.TabIndex = 15;
@@ -261,7 +314,7 @@
             // btnHIGH
             // 
             this.btnHIGH.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnHIGH.Location = new System.Drawing.Point(436, 70);
+            this.btnHIGH.Location = new System.Drawing.Point(435, 103);
             this.btnHIGH.Name = "btnHIGH";
             this.btnHIGH.Size = new System.Drawing.Size(100, 26);
             this.btnHIGH.TabIndex = 16;
@@ -280,57 +333,180 @@
             this.tbHeader.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tbHeader.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbHeader.Location = new System.Drawing.Point(12, 102);
+            this.tbHeader.Location = new System.Drawing.Point(12, 135);
             this.tbHeader.Name = "tbHeader";
             this.tbHeader.Size = new System.Drawing.Size(523, 66);
             this.tbHeader.TabIndex = 17;
             this.tbHeader.Text = "";
             // 
-            // cbDarkMode
+            // cbAutosave
             // 
-            this.cbDarkMode.AutoSize = true;
-            this.cbDarkMode.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbDarkMode.Location = new System.Drawing.Point(436, 45);
-            this.cbDarkMode.Name = "cbDarkMode";
-            this.cbDarkMode.Size = new System.Drawing.Size(94, 20);
-            this.cbDarkMode.TabIndex = 18;
-            this.cbDarkMode.Text = "Dark Mode";
-            this.cbDarkMode.UseVisualStyleBackColor = true;
-            this.cbDarkMode.CheckedChanged += new System.EventHandler(this.cbDarkMode_CheckedChanged);
+            this.cbAutosave.AutoSize = true;
+            this.cbAutosave.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbAutosave.Location = new System.Drawing.Point(448, 40);
+            this.cbAutosave.Name = "cbAutosave";
+            this.cbAutosave.Size = new System.Drawing.Size(84, 20);
+            this.cbAutosave.TabIndex = 18;
+            this.cbAutosave.Text = "Autosave";
+            this.cbAutosave.TextAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.cbAutosave.UseVisualStyleBackColor = true;
+            this.cbAutosave.CheckedChanged += new System.EventHandler(this.cbAutosave_CheckedChanged);
             // 
-            // TimeCode
+            // cbHotkeys
             // 
-            this.TimeCode.DataPropertyName = "TimeCode";
-            this.TimeCode.HeaderText = "Time Code";
-            this.TimeCode.Name = "TimeCode";
-            this.TimeCode.Width = 120;
+            this.cbHotkeys.AutoSize = true;
+            this.cbHotkeys.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbHotkeys.Location = new System.Drawing.Point(448, 81);
+            this.cbHotkeys.Name = "cbHotkeys";
+            this.cbHotkeys.Size = new System.Drawing.Size(77, 20);
+            this.cbHotkeys.TabIndex = 19;
+            this.cbHotkeys.Text = "Hotkeys";
+            this.cbHotkeys.UseVisualStyleBackColor = true;
+            this.cbHotkeys.CheckedChanged += new System.EventHandler(this.cbHotkeys_CheckedChanged);
             // 
-            // FanSpeed
+            // tbUsername
             // 
-            this.FanSpeed.DataPropertyName = "FanSpeed";
-            this.FanSpeed.HeaderText = "Fan Speed";
-            this.FanSpeed.Name = "FanSpeed";
+            this.tbUsername.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbUsername.Location = new System.Drawing.Point(86, 73);
+            this.tbUsername.Name = "tbUsername";
+            this.tbUsername.Size = new System.Drawing.Size(131, 22);
+            this.tbUsername.TabIndex = 20;
             // 
-            // Seek
+            // label1
             // 
-            this.Seek.DataPropertyName = "Seek";
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle2.NullValue = "Seek";
-            this.Seek.DefaultCellStyle = dataGridViewCellStyle2;
-            this.Seek.HeaderText = "Jump To Time";
-            this.Seek.Name = "Seek";
-            this.Seek.Text = "Seek";
-            this.Seek.Width = 105;
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(9, 76);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(71, 16);
+            this.label1.TabIndex = 21;
+            this.label1.Text = "Coded By:";
             // 
-            // Delete
+            // btnFillHeader
             // 
-            this.Delete.DataPropertyName = "Delete";
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle3.NullValue = "Delete";
-            this.Delete.DefaultCellStyle = dataGridViewCellStyle3;
-            this.Delete.HeaderText = "Delete";
-            this.Delete.Name = "Delete";
-            this.Delete.Text = "Delete";
+            this.btnFillHeader.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnFillHeader.Location = new System.Drawing.Point(329, 71);
+            this.btnFillHeader.Name = "btnFillHeader";
+            this.btnFillHeader.Size = new System.Drawing.Size(100, 26);
+            this.btnFillHeader.TabIndex = 22;
+            this.btnFillHeader.Tag = "";
+            this.btnFillHeader.Text = "Fill Header";
+            this.btnFillHeader.UseVisualStyleBackColor = true;
+            this.btnFillHeader.Click += new System.EventHandler(this.btnFillHeader_Click);
+            // 
+            // cbDarkmode
+            // 
+            this.cbDarkmode.AutoSize = true;
+            this.cbDarkmode.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbDarkmode.Location = new System.Drawing.Point(448, 60);
+            this.cbDarkmode.Name = "cbDarkmode";
+            this.cbDarkmode.Size = new System.Drawing.Size(94, 20);
+            this.cbDarkmode.TabIndex = 23;
+            this.cbDarkmode.Text = "Dark Mode";
+            this.cbDarkmode.UseVisualStyleBackColor = true;
+            this.cbDarkmode.CheckedChanged += new System.EventHandler(this.cbDarkmode_CheckedChanged);
+            // 
+            // timerAutosave
+            // 
+            this.timerAutosave.Interval = 60000;
+            this.timerAutosave.Tick += new System.EventHandler(this.timerAutosave_Tick);
+            // 
+            // lblSaved
+            // 
+            this.lblSaved.AutoSize = true;
+            this.lblSaved.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSaved.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.lblSaved.Location = new System.Drawing.Point(396, 41);
+            this.lblSaved.Name = "lblSaved";
+            this.lblSaved.Size = new System.Drawing.Size(51, 16);
+            this.lblSaved.TabIndex = 24;
+            this.lblSaved.Text = "Saved!";
+            this.lblSaved.Visible = false;
+            // 
+            // autosaveLabelUpdate
+            // 
+            this.autosaveLabelUpdate.WorkerReportsProgress = true;
+            this.autosaveLabelUpdate.DoWork += new System.ComponentModel.DoWorkEventHandler(this.autosaveLabelUpdate_DoWork);
+            this.autosaveLabelUpdate.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.autosaveLabelUpdate_ProgressChanged);
+            // 
+            // rbBluray
+            // 
+            this.rbBluray.AutoSize = true;
+            this.rbBluray.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rbBluray.Location = new System.Drawing.Point(243, 66);
+            this.rbBluray.Name = "rbBluray";
+            this.rbBluray.Size = new System.Drawing.Size(68, 20);
+            this.rbBluray.TabIndex = 25;
+            this.rbBluray.Text = "Blu-ray";
+            this.rbBluray.UseVisualStyleBackColor = true;
+            this.rbBluray.CheckedChanged += new System.EventHandler(this.rbBluray_CheckedChanged);
+            // 
+            // rbUHD
+            // 
+            this.rbUHD.AutoSize = true;
+            this.rbUHD.Checked = true;
+            this.rbUHD.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rbUHD.Location = new System.Drawing.Point(243, 83);
+            this.rbUHD.Name = "rbUHD";
+            this.rbUHD.Size = new System.Drawing.Size(56, 20);
+            this.rbUHD.TabIndex = 26;
+            this.rbUHD.TabStop = true;
+            this.rbUHD.Text = "UHD";
+            this.rbUHD.UseVisualStyleBackColor = true;
+            this.rbUHD.CheckedChanged += new System.EventHandler(this.rbUHD_CheckedChanged);
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.rbMPC);
+            this.panel1.Controls.Add(this.rbKodi);
+            this.panel1.Location = new System.Drawing.Point(8, 40);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(162, 27);
+            this.panel1.TabIndex = 27;
+            // 
+            // label2
+            // 
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(244, 887);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(90, 16);
+            this.label2.TabIndex = 29;
+            this.label2.Text = "Spinup Offset:";
+            // 
+            // tbSpinup
+            // 
+            this.tbSpinup.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbSpinup.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbSpinup.Location = new System.Drawing.Point(340, 884);
+            this.tbSpinup.Name = "tbSpinup";
+            this.tbSpinup.Size = new System.Drawing.Size(38, 22);
+            this.tbSpinup.TabIndex = 28;
+            this.tbSpinup.Text = "1500";
+            this.tbSpinup.TextChanged += new System.EventHandler(this.tbSpinup_TextChanged);
+            // 
+            // label3
+            // 
+            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(384, 887);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(107, 16);
+            this.label3.TabIndex = 31;
+            this.label3.Text = "Spindown Offset:";
+            // 
+            // tbSpindown
+            // 
+            this.tbSpindown.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbSpindown.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbSpindown.Location = new System.Drawing.Point(497, 884);
+            this.tbSpindown.Name = "tbSpindown";
+            this.tbSpindown.Size = new System.Drawing.Size(38, 22);
+            this.tbSpindown.TabIndex = 30;
+            this.tbSpindown.Text = "0";
+            this.tbSpindown.TextChanged += new System.EventHandler(this.tbSpindown_TextChanged);
             // 
             // WindTrackCreator
             // 
@@ -338,7 +514,20 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(547, 911);
-            this.Controls.Add(this.cbDarkMode);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.tbSpindown);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.tbSpinup);
+            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.rbUHD);
+            this.Controls.Add(this.rbBluray);
+            this.Controls.Add(this.lblSaved);
+            this.Controls.Add(this.cbDarkmode);
+            this.Controls.Add(this.btnFillHeader);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.tbUsername);
+            this.Controls.Add(this.cbHotkeys);
+            this.Controls.Add(this.cbAutosave);
             this.Controls.Add(this.tbHeader);
             this.Controls.Add(this.btnHIGH);
             this.Controls.Add(this.btnMED);
@@ -349,8 +538,6 @@
             this.Controls.Add(this.lblIP);
             this.Controls.Add(this.tbPort);
             this.Controls.Add(this.tbIP);
-            this.Controls.Add(this.rbKodi);
-            this.Controls.Add(this.rbMPC);
             this.Controls.Add(this.gvCodes);
             this.Controls.Add(this.lblCommandCount);
             this.Controls.Add(this.lblFilePath);
@@ -365,6 +552,8 @@
             this.DragDrop += new System.Windows.Forms.DragEventHandler(this.WindTrackCreator_DragDrop);
             this.DragEnter += new System.Windows.Forms.DragEventHandler(this.WindTrackCreator_DragEnter);
             ((System.ComponentModel.ISupportInitialize)(this.gvCodes)).EndInit();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -390,11 +579,26 @@
         private System.Windows.Forms.Button btnHIGH;
         private System.Windows.Forms.SaveFileDialog saveFileDialog;
         private System.Windows.Forms.RichTextBox tbHeader;
-        private System.Windows.Forms.CheckBox cbDarkMode;
+        private System.Windows.Forms.CheckBox cbAutosave;
         private System.Windows.Forms.DataGridViewTextBoxColumn TimeCode;
         private System.Windows.Forms.DataGridViewTextBoxColumn FanSpeed;
         private System.Windows.Forms.DataGridViewButtonColumn Seek;
         private System.Windows.Forms.DataGridViewButtonColumn Delete;
+        private System.Windows.Forms.CheckBox cbHotkeys;
+        private System.Windows.Forms.TextBox tbUsername;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button btnFillHeader;
+        private System.Windows.Forms.CheckBox cbDarkmode;
+        private System.Windows.Forms.Timer timerAutosave;
+        private System.Windows.Forms.Label lblSaved;
+        private System.ComponentModel.BackgroundWorker autosaveLabelUpdate;
+        private System.Windows.Forms.RadioButton rbBluray;
+        private System.Windows.Forms.RadioButton rbUHD;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TextBox tbSpinup;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox tbSpindown;
     }
 }
 

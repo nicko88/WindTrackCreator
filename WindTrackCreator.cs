@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.IO;
@@ -9,6 +10,7 @@ using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace WindTrackCreator
@@ -21,7 +23,8 @@ namespace WindTrackCreator
         private KeyboardHook _hookNum5;
         private KeyboardHook _hookNum7;
 
-        private bool saved = true;
+        private bool _saved = true;
+        private string _videoLength;
 
         Color _backColor;
         Color _foreColor;
@@ -29,8 +32,6 @@ namespace WindTrackCreator
         Color _btnForeColor;
         Color _gvBackColor;
         Color _gvHeaderBackColor;
-        Color _gvBtnBackColor;
-        Color _gvBtnForeColor;
         FlatStyle _gvBtnStyle;
 
         public WindTrackCreator()
@@ -50,8 +51,13 @@ namespace WindTrackCreator
 
             gvCodes.DataSource = fanTable;
 
-            gvCodes.Sort(gvCodes.Columns["TimeCode"], System.ComponentModel.ListSortDirection.Ascending);
-            saved = true;
+            gvCodes.Sort(gvCodes.Columns["TimeCode"], ListSortDirection.Ascending);
+            gvCodes.Columns["TimeCode"].SortMode = DataGridViewColumnSortMode.NotSortable;
+            gvCodes.Columns["FanSpeed"].SortMode = DataGridViewColumnSortMode.NotSortable;
+            gvCodes.Columns["Seek"].SortMode = DataGridViewColumnSortMode.NotSortable;
+            gvCodes.Columns["Delete"].SortMode = DataGridViewColumnSortMode.NotSortable;
+
+            _saved = true;
         }
 
         private void SaveDefaultColor()
@@ -65,8 +71,6 @@ namespace WindTrackCreator
 
             DataGridViewButtonColumn seek = (DataGridViewButtonColumn)gvCodes.Columns["Seek"];
             _gvBtnStyle = seek.FlatStyle;
-            _gvBtnBackColor = seek.DefaultCellStyle.BackColor;
-            _gvBtnForeColor = seek.DefaultCellStyle.ForeColor;
         }
 
         private void WindTrackCreator_Load(object sender, EventArgs e)
@@ -77,14 +81,27 @@ namespace WindTrackCreator
             _hookNum5 = new KeyboardHook(Constants.NOMOD, Keys.NumPad5, this);
             _hookNum7 = new KeyboardHook(Constants.NOMOD, Keys.NumPad7, this);
 
+            LoadProgramSettings();
+
+            _saved = true;
+        }
+
+        private void RegisterKeys()
+        {
             _hookNum0.Register();
             _hookNum1.Register();
             _hookNum4.Register();
             _hookNum5.Register();
             _hookNum7.Register();
+        }
 
-            LoadProgramSettings();
-            saved = true;
+        private void UnregisterKeys()
+        {
+            _hookNum0.Unregister();
+            _hookNum1.Unregister();
+            _hookNum4.Unregister();
+            _hookNum5.Unregister();
+            _hookNum7.Unregister();
         }
 
         private void LoadProgramSettings()
@@ -113,7 +130,59 @@ namespace WindTrackCreator
                 tbPort.Text = Port;
             }
 
-            cbDarkMode.Checked = CheckRegKey("SOFTWARE\\WindTrackCreator", "DarkMode");
+            string username = GetRegKey("SOFTWARE\\WindTrackCreator", "Username");
+
+            if (!string.IsNullOrEmpty(username))
+            {
+                tbUsername.Text = username;
+            }
+
+            string spinup = GetRegKey("SOFTWARE\\WindTrackCreator", "Spinup");
+
+            if (!string.IsNullOrEmpty(spinup))
+            {
+                tbSpinup.Text = spinup;
+            }
+
+            string spindown = GetRegKey("SOFTWARE\\WindTrackCreator", "Spindown");
+
+            if (!string.IsNullOrEmpty(spindown))
+            {
+                tbSpindown.Text = spindown;
+            }
+
+            cbDarkmode.Checked = CheckRegKey("SOFTWARE\\WindTrackCreator", "DarkMode");
+        }
+
+        private void SaveProgramSettings()
+        {
+            string mediaPlayer = "";
+            if (rbMPC.Checked)
+            {
+                mediaPlayer = "MPC";
+            }
+            else if (rbKodi.Checked)
+            {
+                mediaPlayer = "Kodi";
+            }
+
+            RegistryKey key = Registry.CurrentUser.CreateSubKey("SOFTWARE\\WindTrackCreator", true);
+            key.SetValue("MediaPlayer", mediaPlayer);
+
+            key = Registry.CurrentUser.CreateSubKey("SOFTWARE\\WindTrackCreator", true);
+            key.SetValue("IP", tbIP.Text);
+
+            key = Registry.CurrentUser.CreateSubKey("SOFTWARE\\WindTrackCreator", true);
+            key.SetValue("Port", tbPort.Text);
+
+            key = Registry.CurrentUser.CreateSubKey("SOFTWARE\\WindTrackCreator", true);
+            key.SetValue("Username", tbUsername.Text);
+
+            key = Registry.CurrentUser.CreateSubKey("SOFTWARE\\WindTrackCreator", true);
+            key.SetValue("Spinup", tbSpinup.Text);
+
+            key = Registry.CurrentUser.CreateSubKey("SOFTWARE\\WindTrackCreator", true);
+            key.SetValue("Spindown", tbSpindown.Text);
         }
 
         protected override void WndProc(ref Message m)
@@ -181,9 +250,10 @@ namespace WindTrackCreator
                     }
                 }
 
-                saved = false;
+                _saved = false;
             }
 
+            ColorGrid();
             UpdateCodeCount();
         }
 
@@ -194,7 +264,7 @@ namespace WindTrackCreator
                 try
                 {
                     string html;
-                    using (var client = new WebClient())
+                    using (var client = new WebClientWithTimeout())
                     {
                         html = client.DownloadString($"http://{tbIP.Text}:{tbPort.Text}/variables.html");
                     }
@@ -208,6 +278,8 @@ namespace WindTrackCreator
                     string filename = doc.GetElementbyId("file").InnerText;
                     FileInfo file = new FileInfo(filename);
                     saveFileDialog.FileName = file.Name.Replace(file.Extension, ".txt");
+
+                    _videoLength = doc.GetElementbyId("durationstring").InnerText;
 
                     TimeSpan t = TimeSpan.FromMilliseconds(positionMS);
                     return t.ToString("G").Substring(2, 12);
@@ -224,13 +296,16 @@ namespace WindTrackCreator
                 {
                     string timeJSONRequest = @"{""jsonrpc"": ""2.0"", ""method"": ""Player.GetProperties"", ""params"": {""properties"": [""time"", ""speed""], ""playerid"": 1}, ""id"": 1}";
                     string filenameJSONRequest = @"{""jsonrpc"": ""2.0"", ""method"": ""Player.GetItem"", ""params"": {""properties"": [""file""], ""playerid"": 1}, ""id"": 1 }";
+                    string runtimeJSONRequest = @"{""jsonrpc"": ""2.0"", ""method"": ""Player.GetItem"", ""params"": { ""properties"": [""runtime""], ""playerid"": 1 }, ""id"": 0 }";
                     string timeJSONResponse;
                     string filenameJSONResponse;
+                    string runtimeJSONRespoonse;
 
-                    using (var webClient = new WebClient())
+                    using (var webClient = new WebClientWithTimeout())
                     {
                         timeJSONResponse = webClient.UploadString($"http://{tbIP.Text}:{tbPort.Text}/jsonrpc", "POST", timeJSONRequest);
                         filenameJSONResponse = webClient.UploadString($"http://{tbIP.Text}:{tbPort.Text}/jsonrpc", "POST", filenameJSONRequest);
+                        runtimeJSONRespoonse = webClient.UploadString($"http://{tbIP.Text}:{tbPort.Text}/jsonrpc", "POST", runtimeJSONRequest);
                     }
 
                     JObject time = JObject.Parse(timeJSONResponse);
@@ -246,6 +321,11 @@ namespace WindTrackCreator
                     filepath = filepath.Replace("smb:", "");
                     FileInfo file = new FileInfo(filepath);
                     saveFileDialog.FileName = file.Name.Replace(file.Extension, ".txt");
+
+                    JObject runtimeinfo = JObject.Parse(runtimeJSONRespoonse);
+                    string runtimeSeconds = (string)runtimeinfo["result"]["item"]["runtime"];
+
+                    _videoLength = TimeSpan.FromSeconds(Convert.ToDouble(runtimeSeconds)).ToString();
 
                     TimeSpan t = TimeSpan.FromMilliseconds(positionMS);
                     return t.ToString("G").Substring(2, 12);
@@ -304,16 +384,18 @@ namespace WindTrackCreator
             }
 
             gvCodes.DataSource = fanTable;
-            gvCodes.Sort(gvCodes.Columns["TimeCode"], System.ComponentModel.ListSortDirection.Ascending);
-            saved = true;
+            gvCodes.Sort(gvCodes.Columns["TimeCode"], ListSortDirection.Ascending);
+            _saved = true;
+
+            ColorGrid();
         }
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            SaveFile();
+            SaveFile(false);
         }
 
-        private void SaveFile()
+        private bool SaveFile(bool silent)
         {
             try
             {
@@ -354,57 +436,65 @@ namespace WindTrackCreator
 
                 File.WriteAllLines(lblFilePath.Text, header);
 
-                MessageBox.Show(this, "Saved", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                saved = true;
+                if(!silent)
+                { 
+                    MessageBox.Show(this, "Saved", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+
+                _saved = true;
+                return true;
             }
             catch (Exception ex)
             {
                 MessageBox.Show(this, "Error, not saved.\n\n" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
             }
         }
 
         private void WindTrackCreator_FormClosed(object sender, FormClosedEventArgs e)
         {
-            _hookNum0.Unregister();
-            _hookNum1.Unregister();
-            _hookNum4.Unregister();
-            _hookNum5.Unregister();
-            _hookNum7.Unregister();
+            UnregisterKeys();
 
             SaveProgramSettings();
         }
 
-        private void SaveProgramSettings()
+        private void btnFillHeader_Click(object sender, EventArgs e)
         {
-            string mediaPlayer = "";
-            if (rbMPC.Checked)
+            string time = "";
+            if (_videoLength is null)
             {
-                mediaPlayer = "MPC";
-            }
-            else if (rbKodi.Checked)
-            {
-                mediaPlayer = "Kodi";
+                time = GetTime();
             }
 
-            RegistryKey key = Registry.CurrentUser.CreateSubKey("SOFTWARE\\WindTrackCreator", true);
-            key.SetValue("MediaPlayer", mediaPlayer);
+            if(time != null)
+            {
+                FillHeader();
+            }
+        }
 
-            key = Registry.CurrentUser.CreateSubKey("SOFTWARE\\WindTrackCreator", true);
-            key.SetValue("IP", tbIP.Text);
-
-            key = Registry.CurrentUser.CreateSubKey("SOFTWARE\\WindTrackCreator", true);
-            key.SetValue("Port", tbPort.Text);
+        private void FillHeader()
+        {
+            tbHeader.Text = $"{Path.GetFileNameWithoutExtension(saveFileDialog.FileName)}\n";
+            if (rbUHD.Checked)
+            {
+                tbHeader.Text += $"4K Ultra HD Blu-ray ({_videoLength})\n";
+            }
+            else
+            {
+                tbHeader.Text += $"HD Blu-ray ({_videoLength})\n";
+            }
+            tbHeader.Text += $"Coded by: {tbUsername.Text}";
         }
 
         private void WindTrackCreator_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if(!saved)
+            if(!_saved)
             {
                 DialogResult result = MessageBox.Show(this, "File not saved, do you want to save?", "Save?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                 if(result == DialogResult.Yes)
                 {
-                    SaveFile();
+                    SaveFile(false);
                     e.Cancel = true;
                 }
             }
@@ -423,10 +513,12 @@ namespace WindTrackCreator
                     try
                     {
                         gvCodes.Rows.RemoveAt(e.RowIndex);
-                        saved = false;
+                        _saved = false;
                         UpdateCodeCount();
                     }
                     catch { }
+
+                    ColorGrid();
                 }
                 else
                 {
@@ -485,6 +577,74 @@ namespace WindTrackCreator
             }
         }
 
+        private void ColorGrid()
+        {
+            double prevTime = -500;
+            string prevCMD = "";
+            int spinup = 0;
+            int spindown = 0;
+
+            try
+            {
+                spinup = Convert.ToInt32(tbSpinup.Text);
+            }
+            catch { }
+
+            try
+            {
+                spindown = Convert.ToInt32(tbSpindown.Text);
+            }
+            catch { }
+
+            foreach (DataGridViewRow row in gvCodes.Rows)
+            {
+                if(cbDarkmode.Checked)
+                {
+                    row.DefaultCellStyle.BackColor = Color.Black;
+                    row.DefaultCellStyle.ForeColor = Color.White;
+                }
+                else
+                {
+                    row.DefaultCellStyle.BackColor = Color.White;
+                    row.DefaultCellStyle.ForeColor = Color.Black;
+                }
+
+                try
+                {
+                    double time = TimeSpan.Parse(row.Cells["TimeCode"].Value.ToString()).TotalMilliseconds;
+                    string CMD = row.Cells["FanSpeed"].Value.ToString();
+
+                    if (prevCMD == "OFF")
+                    {
+                        if (time - prevTime < spinup + 500)
+                        {
+                            row.DefaultCellStyle.BackColor = Color.FromArgb(255, 255, 128);
+                            row.DefaultCellStyle.ForeColor = Color.Black;
+                        }
+                    }
+
+                    if (CMD == "OFF")
+                    {
+                        if (time - prevTime < spindown + 500)
+                        {
+                            row.DefaultCellStyle.BackColor = Color.FromArgb(255, 255, 128);
+                            row.DefaultCellStyle.ForeColor = Color.Black;
+                        }
+                    }
+
+                    if (time - prevTime < 500)
+                    {
+                        row.DefaultCellStyle.BackColor = Color.FromArgb(255, 128, 128);
+                        row.DefaultCellStyle.ForeColor = Color.Black;
+                    }
+
+                    prevCMD = CMD;
+                    prevTime = time;
+                }
+                catch { }
+            }
+        }
+
         private void WindTrackCreator_DragEnter(object sender, DragEventArgs e)
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
@@ -526,6 +686,22 @@ namespace WindTrackCreator
             }
         }
 
+        private void rbBluray_CheckedChanged(object sender, EventArgs e)
+        {
+            if(rbBluray.Checked)
+            {
+                rbUHD.Checked = false;
+            }
+        }
+
+        private void rbUHD_CheckedChanged(object sender, EventArgs e)
+        {
+            if (rbUHD.Checked)
+            {
+                rbBluray.Checked = false;
+            }
+        }
+
         private void btnCMD_Click(object sender, EventArgs e)
         {
             Button btn = (Button)sender;
@@ -534,13 +710,14 @@ namespace WindTrackCreator
 
         private void gvCodes_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
         {
-            saved = false;
+            _saved = false;
             UpdateCodeCount();
         }
 
         private void gvCodes_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
-            saved = false;
+            _saved = false;
+            ColorGrid();
             UpdateCodeCount();
         }
 
@@ -575,9 +752,9 @@ namespace WindTrackCreator
             lblCommandCount.Text = "Total Commands: " + (gvCodes.Rows.Count - 1).ToString();
         }
 
-        private void cbDarkMode_CheckedChanged(object sender, EventArgs e)
+        private void cbDarkmode_CheckedChanged(object sender, EventArgs e)
         {
-            if (cbDarkMode.Checked)
+            if (cbDarkmode.Checked)
             {
                 RegistryKey key = Registry.CurrentUser.CreateSubKey("SOFTWARE\\WindTrackCreator", true);
                 key.SetValue("DarkMode", true);
@@ -591,11 +768,84 @@ namespace WindTrackCreator
 
                 SetLightMode();
             }
+
+            ColorGrid();
+        }
+
+        private void cbAutosave_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cbAutosave.Checked)
+            {
+                bool success = SaveFile(true);
+
+                if (success)
+                {
+                    timerAutosave.Enabled = true;
+                    timerAutosave.Start();
+                }
+                else
+                {
+                    cbAutosave.Checked = false;
+                }
+            }
+            else
+            {
+                timerAutosave.Enabled = false;
+                timerAutosave.Stop();
+            }
+        }
+
+        private void cbHotkeys_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cbHotkeys.Checked)
+            {
+                RegisterKeys();
+            }
+            else
+            {
+                UnregisterKeys();
+            }
+        }
+
+        private void timerAutosave_Tick(object sender, EventArgs e)
+        {
+            bool success = SaveFile(true);
+
+            if (success)
+            {
+                autosaveLabelUpdate.RunWorkerAsync();
+            }
+            else
+            {
+                cbAutosave.Checked = false;
+            }
+        }
+
+        private void autosaveLabelUpdate_DoWork(object sender, DoWorkEventArgs e)
+        {
+            autosaveLabelUpdate.ReportProgress(0, true);
+            Thread.Sleep(3000);
+            autosaveLabelUpdate.ReportProgress(0, false);
+        }
+
+        private void autosaveLabelUpdate_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            lblSaved.Visible = (bool)e.UserState;
+        }
+
+        private void tbSpinup_TextChanged(object sender, EventArgs e)
+        {
+            ColorGrid();
+        }
+
+        private void tbSpindown_TextChanged(object sender, EventArgs e)
+        {
+            ColorGrid();
         }
 
         private void SetDarkMode()
         {
-            BackColor = ColorTranslator.FromHtml("#2d2d2d");
+            BackColor = Color.FromArgb(45, 45, 45);
             ForeColor = Color.White;
 
             btnOpen.BackColor = Color.Black;
@@ -619,29 +869,37 @@ namespace WindTrackCreator
             btnHIGH.BackColor = Color.Black;
             btnHIGH.ForeColor = Color.White;
 
+            btnFillHeader.BackColor = Color.Black;
+            btnFillHeader.ForeColor = Color.White;
+
             tbIP.BackColor = Color.Black;
             tbIP.ForeColor = Color.White;
 
             tbPort.BackColor = Color.Black;
             tbPort.ForeColor = Color.White;
 
+            tbUsername.BackColor = Color.Black;
+            tbUsername.ForeColor = Color.White;
+
+            tbSpinup.BackColor = Color.Black;
+            tbSpinup.ForeColor = Color.White;
+
+            tbSpindown.BackColor = Color.Black;
+            tbSpindown.ForeColor = Color.White;
+
             tbHeader.BackColor = Color.Black;
             tbHeader.ForeColor = Color.White;
 
-            gvCodes.BackgroundColor = ColorTranslator.FromHtml("#242424");
+            gvCodes.BackgroundColor = Color.FromArgb(36, 36, 36);
             gvCodes.DefaultCellStyle.BackColor = Color.Black;
             gvCodes.ColumnHeadersDefaultCellStyle.BackColor = Color.Black;
             gvCodes.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
 
             DataGridViewButtonColumn seek = (DataGridViewButtonColumn)gvCodes.Columns["Seek"];
             seek.FlatStyle = FlatStyle.Popup;
-            seek.DefaultCellStyle.BackColor = Color.Black;
-            seek.DefaultCellStyle.ForeColor = Color.White;
 
             DataGridViewButtonColumn delete = (DataGridViewButtonColumn)gvCodes.Columns["Delete"];
             delete.FlatStyle = FlatStyle.Popup;
-            delete.DefaultCellStyle.BackColor = Color.Black;
-            delete.DefaultCellStyle.ForeColor = Color.White;
         }
 
         private void SetLightMode()
@@ -670,11 +928,23 @@ namespace WindTrackCreator
             btnHIGH.BackColor = _btnBackColor;
             btnHIGH.ForeColor = _btnForeColor;
 
+            btnFillHeader.BackColor = _btnBackColor;
+            btnFillHeader.ForeColor = _btnForeColor;
+
             tbIP.BackColor = Color.White;
             tbIP.ForeColor = Color.Black;
 
             tbPort.BackColor = Color.White;
             tbPort.ForeColor = Color.Black;
+
+            tbUsername.BackColor = Color.White;
+            tbUsername.ForeColor = Color.Black;
+
+            tbSpinup.BackColor = Color.White;
+            tbSpinup.ForeColor = Color.Black;
+
+            tbSpindown.BackColor = Color.White;
+            tbSpindown.ForeColor = Color.Black;
 
             tbHeader.BackColor = Color.White;
             tbHeader.ForeColor = Color.Black;
@@ -686,13 +956,9 @@ namespace WindTrackCreator
 
             DataGridViewButtonColumn seek = (DataGridViewButtonColumn)gvCodes.Columns["Seek"];
             seek.FlatStyle = _gvBtnStyle;
-            seek.DefaultCellStyle.BackColor = _gvBtnBackColor;
-            seek.DefaultCellStyle.ForeColor = _gvBtnForeColor;
 
             DataGridViewButtonColumn delete = (DataGridViewButtonColumn)gvCodes.Columns["Delete"];
             delete.FlatStyle = _gvBtnStyle;
-            delete.DefaultCellStyle.BackColor = _gvBtnBackColor;
-            delete.DefaultCellStyle.ForeColor = _gvBtnForeColor;
         }
     }
 }
