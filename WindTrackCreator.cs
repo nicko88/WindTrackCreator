@@ -611,35 +611,38 @@ namespace WindTrackCreator
 
                 try
                 {
-                    double time = TimeSpan.Parse(row.Cells["TimeCode"].Value.ToString()).TotalMilliseconds;
-                    string CMD = row.Cells["FanSpeed"].Value.ToString();
-
-                    if (prevCMD == "OFF")
+                    if (row.Cells["TimeCode"].Value != null)
                     {
-                        if (time - prevTime < spinup + 500)
+                        double time = TimeSpan.Parse(row.Cells["TimeCode"].Value.ToString()).TotalMilliseconds;
+                        string CMD = row.Cells["FanSpeed"].Value.ToString();
+
+                        if (prevCMD == "OFF")
                         {
-                            row.DefaultCellStyle.BackColor = Color.FromArgb(255, 255, 128);
+                            if (time - prevTime < spinup + 500)
+                            {
+                                row.DefaultCellStyle.BackColor = Color.FromArgb(255, 255, 128);
+                                row.DefaultCellStyle.ForeColor = Color.Black;
+                            }
+                        }
+
+                        if (CMD == "OFF")
+                        {
+                            if (time - prevTime < spindown + 500)
+                            {
+                                row.DefaultCellStyle.BackColor = Color.FromArgb(255, 255, 128);
+                                row.DefaultCellStyle.ForeColor = Color.Black;
+                            }
+                        }
+
+                        if (time - prevTime < 500)
+                        {
+                            row.DefaultCellStyle.BackColor = Color.FromArgb(255, 128, 128);
                             row.DefaultCellStyle.ForeColor = Color.Black;
                         }
-                    }
 
-                    if (CMD == "OFF")
-                    {
-                        if (time - prevTime < spindown + 500)
-                        {
-                            row.DefaultCellStyle.BackColor = Color.FromArgb(255, 255, 128);
-                            row.DefaultCellStyle.ForeColor = Color.Black;
-                        }
+                        prevCMD = CMD;
+                        prevTime = time;
                     }
-
-                    if (time - prevTime < 500)
-                    {
-                        row.DefaultCellStyle.BackColor = Color.FromArgb(255, 128, 128);
-                        row.DefaultCellStyle.ForeColor = Color.Black;
-                    }
-
-                    prevCMD = CMD;
-                    prevTime = time;
                 }
                 catch { }
             }
