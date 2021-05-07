@@ -25,6 +25,7 @@ namespace WindTrackCreator
 
         private bool _saved = true;
         private string _videoLength;
+        private string _videoPath;
 
         Color _backColor;
         Color _foreColor;
@@ -106,7 +107,7 @@ namespace WindTrackCreator
 
         private void LoadProgramSettings()
         {
-            string mediaPlayer = GetRegKey("SOFTWARE\\WindTrackCreator", "MediaPlayer");
+            string mediaPlayer = Util.WinRegistry.GetRegKey("SOFTWARE\\WindTrackCreator", "MediaPlayer");
 
             if(mediaPlayer == "MPC")
             {
@@ -117,8 +118,8 @@ namespace WindTrackCreator
                 rbKodi.Checked = true;
             }
 
-            string IP = GetRegKey("SOFTWARE\\WindTrackCreator", "IP");
-            string Port = GetRegKey("SOFTWARE\\WindTrackCreator", "Port");
+            string IP = Util.WinRegistry.GetRegKey("SOFTWARE\\WindTrackCreator", "IP");
+            string Port = Util.WinRegistry.GetRegKey("SOFTWARE\\WindTrackCreator", "Port");
 
             if(!string.IsNullOrEmpty(IP))
             {
@@ -130,28 +131,28 @@ namespace WindTrackCreator
                 tbPort.Text = Port;
             }
 
-            string username = GetRegKey("SOFTWARE\\WindTrackCreator", "Username");
+            string username = Util.WinRegistry.GetRegKey("SOFTWARE\\WindTrackCreator", "Username");
 
             if (!string.IsNullOrEmpty(username))
             {
                 tbUsername.Text = username;
             }
 
-            string spinup = GetRegKey("SOFTWARE\\WindTrackCreator", "Spinup");
+            string spinup = Util.WinRegistry.GetRegKey("SOFTWARE\\WindTrackCreator", "Spinup");
 
             if (!string.IsNullOrEmpty(spinup))
             {
                 tbSpinup.Text = spinup;
             }
 
-            string spindown = GetRegKey("SOFTWARE\\WindTrackCreator", "Spindown");
+            string spindown = Util.WinRegistry.GetRegKey("SOFTWARE\\WindTrackCreator", "Spindown");
 
             if (!string.IsNullOrEmpty(spindown))
             {
                 tbSpindown.Text = spindown;
             }
 
-            cbDarkmode.Checked = CheckRegKey("SOFTWARE\\WindTrackCreator", "DarkMode");
+            cbDarkmode.Checked = Util.WinRegistry.CheckRegKey("SOFTWARE\\WindTrackCreator", "DarkMode");
         }
 
         private void SaveProgramSettings()
@@ -218,7 +219,7 @@ namespace WindTrackCreator
 
         private void AddCode(string fanSpeed)
         {
-            string time = GetTime();
+            string time = GetTime(true);
             if (!string.IsNullOrEmpty(time))
             {
                 DataTable dT = (DataTable)gvCodes.DataSource;
@@ -257,7 +258,7 @@ namespace WindTrackCreator
             UpdateCodeCount();
         }
 
-        private string GetTime()
+        private string GetTime(bool showError)
         {
             if (rbMPC.Checked)
             {
@@ -279,6 +280,8 @@ namespace WindTrackCreator
                     FileInfo file = new FileInfo(filename);
                     saveFileDialog.FileName = file.Name.Replace(file.Extension, ".txt");
 
+                    _videoPath = doc.GetElementbyId("filepath").InnerText;
+
                     _videoLength = doc.GetElementbyId("durationstring").InnerText;
 
                     TimeSpan t = TimeSpan.FromMilliseconds(positionMS);
@@ -286,7 +289,10 @@ namespace WindTrackCreator
                 }
                 catch
                 {
-                    MessageBox.Show(this, "Can't connect to MPC.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    if (showError)
+                    {
+                        MessageBox.Show(this, "Can't connect to MPC.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                     return null;
                 }
             }
@@ -332,7 +338,10 @@ namespace WindTrackCreator
                 }
                 catch
                 {
-                    MessageBox.Show(this, "Can't connect to Kodi.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    if (showError)
+                    {
+                        MessageBox.Show(this, "Can't connect to Kodi.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                     return null;
                 }
             }
@@ -388,6 +397,8 @@ namespace WindTrackCreator
             _saved = true;
 
             ColorGrid();
+
+            btnFingerprint.Enabled = true;
         }
 
         private void btnSave_Click(object sender, EventArgs e)
@@ -463,7 +474,7 @@ namespace WindTrackCreator
             string time = "";
             if (_videoLength is null)
             {
-                time = GetTime();
+                time = GetTime(true);
             }
 
             if(time != null)
@@ -664,7 +675,7 @@ namespace WindTrackCreator
         {
             string[] fileList = (string[])e.Data.GetData(DataFormats.FileDrop, false);
 
-            if (fileList.Length > 0)
+            if (fileList.Length > 0 && fileList[0].EndsWith(".txt"))
             {
                 LoadFile(fileList[0]);
                 lblFilePath.Text = fileList[0];
@@ -722,32 +733,6 @@ namespace WindTrackCreator
             _saved = false;
             ColorGrid();
             UpdateCodeCount();
-        }
-
-        public string GetRegKey(string path, string key)
-        {
-            try
-            {
-                RegistryKey regKey = Registry.CurrentUser.OpenSubKey(path, true);
-                return regKey.GetValue(key).ToString();
-            }
-            catch
-            {
-                return "";
-            }
-        }
-
-        public static bool CheckRegKey(string path, string key)
-        {
-            try
-            {
-                RegistryKey regKey = Registry.CurrentUser.OpenSubKey(path, true);
-                return (regKey.GetValueNames().Contains(key));
-            }
-            catch
-            {
-                return false;
-            }
         }
 
         private void UpdateCodeCount()
@@ -962,6 +947,18 @@ namespace WindTrackCreator
 
             DataGridViewButtonColumn delete = (DataGridViewButtonColumn)gvCodes.Columns["Delete"];
             delete.FlatStyle = _gvBtnStyle;
+        }
+
+        private void btnFingerprint_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                GetTime(false);
+            }
+            catch { }
+
+            AudioFingerprintCreator audioFingerprintCreator = new AudioFingerprintCreator(lblFilePath.Text, _videoPath, tbUsername.Text);
+            audioFingerprintCreator.ShowDialog();
         }
     }
 }

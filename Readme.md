@@ -15,6 +15,7 @@ WindTrackCreator is an application meant to help create wind tracks for the [HTF
 * Seek through the movie and press the OFF, ECO, LOW, MED, and HIGH buttons (or their cooresponding numpad hotkeys) to insert fan commands at that time.
 * You can click the Seek button to jump to an existing fan command time.
 * Don't forget to save your work when you are done.
+* After you are done creating the Wind Track, proceed top creating the Audio Fingerprints.
 
 The spinup and spindown offset numbers at the bottom are just there to help you format your command times with reasonable timing gaps.  Time code lines will highlight in red if 2 commands are closer than 500ms from each other and lines will highlight in yellow if the spinup (commands following an OFF) or spindown (OFF commands) times when subtracted from the time code would put the time code closer than 500ms to the previous command.
 
@@ -71,11 +72,34 @@ MIL = Milliseconds
 **00:09:43.374,HIGH**  
 **...**
 
-### Sharing Your Wind Track Files
+### Audio Fingerprints and final Wind Track Package
 
-I encourage you to post and share the wind track files you make with others over on the community forum.  Someone there will then upload your wind track to the online database on Pastebin [here](https://pastebin.com/u/SOWK).
+Once you are done creating the commands for your wind track, you then need to create the audio fingerprints and package them up into into a wind track .zip package.
 
-When your wind track is uploaded to the pastebin database, it will also become available for other users to download directly from their HTFanControl web interface.
+The format for the wind track .zip package is a .zip file with the name of your movie, i.e. **Movie Name (Year)** and inside the .zip will be 3 files:
+
+* **commands.txt** (the wind track text file)
+* **full.fingerprints** (audio fingerprints for the full movie that was used to create the wind track)
+* **intro.fingerprints** (audio fingerprints for the first 5 minutes of the movie)
+
+You do not need to worry about creating this package yourself as WindTrackCreator will do it for you.
+
+Simply open your wind track file, and click on the "Create Fingerprints" button at the bottom.
+
+First, you need to make sure that you have FFmpeg installed (click the link on the top right of the "Audio Fingerprint Creator" window to do this)
+
+Next, make sure you have a video file opened, a temp folder selected, and a wind track package name entered, i.e. **Movie Name (Year)**
+
+Finally, click the "Create" button and wait for the process to finish.
+
+When the process finishes successfully you will get a message popup, and your Wind Track Package file will be located in the "windtracks" folder located next to WindTrackCreator.exe
+
+
+### Sharing Your Wind Track Package Files
+
+I encourage you to post and share the wind track files you make with others over on the community forum.  Someone there will then upload your wind track to the online database on Google Drive [here](https://drive.google.com/drive/folders/13xoJMKeXX69woyt1Qzd_Qz_L6MUwTd1K).
+
+When your wind track is uploaded to the Google Drive database, it will also become available for other users to download directly from their HTFanControl web interface.
 
 ### Community
 

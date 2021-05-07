@@ -73,6 +73,7 @@
             this.tbSpinup = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.tbSpindown = new System.Windows.Forms.TextBox();
+            this.btnFingerprint = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.gvCodes)).BeginInit();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -161,7 +162,7 @@
             this.gvCodes.MultiSelect = false;
             this.gvCodes.Name = "gvCodes";
             this.gvCodes.RowHeadersVisible = false;
-            this.gvCodes.Size = new System.Drawing.Size(523, 671);
+            this.gvCodes.Size = new System.Drawing.Size(523, 659);
             this.gvCodes.TabIndex = 5;
             this.gvCodes.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.gvCodes_CellContentClick);
             this.gvCodes.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.gvCodes_CellEndEdit);
@@ -467,19 +468,19 @@
             // label2
             // 
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(244, 887);
+            this.label2.Location = new System.Drawing.Point(313, 869);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(90, 16);
+            this.label2.Size = new System.Drawing.Size(58, 36);
             this.label2.TabIndex = 29;
             this.label2.Text = "Spinup Offset:";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // tbSpinup
             // 
             this.tbSpinup.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.tbSpinup.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbSpinup.Location = new System.Drawing.Point(340, 884);
+            this.tbSpinup.Location = new System.Drawing.Point(377, 876);
             this.tbSpinup.Name = "tbSpinup";
             this.tbSpinup.Size = new System.Drawing.Size(38, 22);
             this.tbSpinup.TabIndex = 28;
@@ -489,24 +490,37 @@
             // label3
             // 
             this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(384, 887);
+            this.label3.Location = new System.Drawing.Point(421, 869);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(107, 16);
+            this.label3.Size = new System.Drawing.Size(70, 36);
             this.label3.TabIndex = 31;
             this.label3.Text = "Spindown Offset:";
+            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // tbSpindown
             // 
             this.tbSpindown.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.tbSpindown.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbSpindown.Location = new System.Drawing.Point(497, 884);
+            this.tbSpindown.Location = new System.Drawing.Point(497, 876);
             this.tbSpindown.Name = "tbSpindown";
             this.tbSpindown.Size = new System.Drawing.Size(38, 22);
             this.tbSpindown.TabIndex = 30;
             this.tbSpindown.Text = "0";
             this.tbSpindown.TextChanged += new System.EventHandler(this.tbSpindown_TextChanged);
+            // 
+            // btnFingerprint
+            // 
+            this.btnFingerprint.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnFingerprint.Enabled = false;
+            this.btnFingerprint.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnFingerprint.Location = new System.Drawing.Point(167, 872);
+            this.btnFingerprint.Name = "btnFingerprint";
+            this.btnFingerprint.Size = new System.Drawing.Size(132, 33);
+            this.btnFingerprint.TabIndex = 32;
+            this.btnFingerprint.Text = "Create Fingerprints";
+            this.btnFingerprint.UseVisualStyleBackColor = true;
+            this.btnFingerprint.Click += new System.EventHandler(this.btnFingerprint_Click);
             // 
             // WindTrackCreator
             // 
@@ -514,6 +528,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(547, 911);
+            this.Controls.Add(this.btnFingerprint);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.tbSpindown);
             this.Controls.Add(this.label2);
@@ -599,6 +614,7 @@
         private System.Windows.Forms.TextBox tbSpinup;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox tbSpindown;
+        private System.Windows.Forms.Button btnFingerprint;
     }
 }
 
