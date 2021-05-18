@@ -831,6 +831,23 @@ namespace WindTrackCreator
             ColorGrid();
         }
 
+        private void btnFingerprint_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                GetTime(false);
+            }
+            catch { }
+
+            AudioFingerprintCreator audioFingerprintCreator = new AudioFingerprintCreator(lblFilePath.Text, _videoPath, tbUsername.Text);
+            DialogResult dialogResult = audioFingerprintCreator.ShowDialog();
+
+            if (dialogResult == DialogResult.OK)
+            {
+                MessageBox.Show(this, "Package created successfully!", "Done!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
         private void SetDarkMode()
         {
             BackColor = Color.FromArgb(45, 45, 45);
@@ -859,6 +876,9 @@ namespace WindTrackCreator
 
             btnFillHeader.BackColor = Color.Black;
             btnFillHeader.ForeColor = Color.White;
+
+            btnFingerprint.BackColor = Color.FromArgb(45, 45, 45);
+            btnFingerprint.ForeColor = Color.White;
 
             tbIP.BackColor = Color.Black;
             tbIP.ForeColor = Color.White;
@@ -919,6 +939,9 @@ namespace WindTrackCreator
             btnFillHeader.BackColor = _btnBackColor;
             btnFillHeader.ForeColor = _btnForeColor;
 
+            btnFingerprint.BackColor = _btnBackColor;
+            btnFingerprint.ForeColor = _btnForeColor;
+
             tbIP.BackColor = Color.White;
             tbIP.ForeColor = Color.Black;
 
@@ -947,18 +970,6 @@ namespace WindTrackCreator
 
             DataGridViewButtonColumn delete = (DataGridViewButtonColumn)gvCodes.Columns["Delete"];
             delete.FlatStyle = _gvBtnStyle;
-        }
-
-        private void btnFingerprint_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                GetTime(false);
-            }
-            catch { }
-
-            AudioFingerprintCreator audioFingerprintCreator = new AudioFingerprintCreator(lblFilePath.Text, _videoPath, tbUsername.Text);
-            audioFingerprintCreator.ShowDialog();
         }
     }
 }

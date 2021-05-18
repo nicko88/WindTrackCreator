@@ -140,6 +140,8 @@ namespace WindTrackCreator
             bool error = false;
             lblWait.Visible = true;
 
+            ClearDir();
+
             try
             {
                 Directory.CreateDirectory($@"{tbWorkingPath.Text}\zip");
@@ -173,21 +175,31 @@ namespace WindTrackCreator
                 error = true;
             }
 
-            DirectoryInfo tmp = new DirectoryInfo(tbWorkingPath.Text);
-            foreach (FileInfo file in tmp.GetFiles())
-            {
-                file.Delete();
-            }
-            foreach (DirectoryInfo dir in tmp.GetDirectories())
-            {
-                dir.Delete(true);
-            }
+            ClearDir();
 
             lblWait.Visible = false;
             if (!error)
             {
-                MessageBox.Show("Package created successfully!", "Done!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                DialogResult = DialogResult.OK;
+                Close();
             }
+        }
+
+        private void ClearDir()
+        {
+            try
+            {
+                DirectoryInfo tmp = new DirectoryInfo(tbWorkingPath.Text);
+                foreach (FileInfo file in tmp.GetFiles())
+                {
+                    file.Delete();
+                }
+                foreach (DirectoryInfo dir in tmp.GetDirectories())
+                {
+                    dir.Delete(true);
+                }
+            }
+            catch { }
         }
 
         private void CreateFingerprints(string audioPath, string ID, string name, string artist, string fingerprintPath)
