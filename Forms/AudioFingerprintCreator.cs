@@ -20,7 +20,7 @@ namespace WindTrackCreator
         private string _creatorName;
 
         private readonly string _rootPath = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
-        private readonly string _FFmpegDownloadLink = "https://github.com/BtbN/FFmpeg-Builds/releases/download/autobuild-2020-10-31-12-32/ffmpeg-N-99816-g3da35b7cc7-win64-gpl-shared.zip";
+        private readonly string _FFmpegDownloadLink = "https://raw.githubusercontent.com/nicko88/WindTrackCreator/master/ffmpeg/ffmpeg-n4.4.1-2-gcc33e73618-win64-gpl-shared-4.4.zip";
 
         public AudioFingerprintCreator(string windtrackPath, string videoPath, string creatorName)
         {
@@ -97,7 +97,7 @@ namespace WindTrackCreator
 
                         foreach (ZipArchiveEntry entry in archive.Entries)
                         {
-                            if(entry.FullName.StartsWith("ffmpeg-N-99816-g3da35b7cc7-win64-gpl-shared/bin/") && !string.IsNullOrEmpty(entry.Name))
+                            if(entry.FullName.StartsWith("ffmpeg-n4.4.1-2-gcc33e73618-win64-gpl-shared-4.4/bin/") && !string.IsNullOrEmpty(entry.Name))
                             {
                                 entry.ExtractToFile($@"FFmpeg\bin\x64\{entry.Name}", true);
                             }
@@ -171,7 +171,7 @@ namespace WindTrackCreator
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Error Creating Windtrack/Fingerprint Package", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message + "\n\n" + ex.InnerException, "Error Creating Windtrack/Fingerprint Package", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 error = true;
             }
 
