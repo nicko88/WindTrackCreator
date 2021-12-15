@@ -37,6 +37,9 @@ namespace WindTrackCreator
 
         public WindTrackCreator()
         {
+            Util.ConfigHelper.EnableMPCBEWebAPI();
+            Util.ConfigHelper.EnableMPCBEChapterMarkers();
+
             InitializeComponent();
 
             SaveDefaultColor();
@@ -211,7 +214,7 @@ namespace WindTrackCreator
                 }
 
                 AddCode(fanSpeed);
-                gvCodes.Sort(gvCodes.Columns["TimeCode"], System.ComponentModel.ListSortDirection.Ascending);
+                gvCodes.Sort(gvCodes.Columns["TimeCode"], ListSortDirection.Ascending);
             }
 
             base.WndProc(ref m);
@@ -848,6 +851,64 @@ namespace WindTrackCreator
             }
         }
 
+        private void addOffsetToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            List<string> errorCodes = new List<string>();
+
+            Forms.AddOffset offset = new Forms.AddOffset($"{tbIP.Text}:{tbPort.Text}");
+            DialogResult offestResult = offset.ShowDialog();
+
+            if (offestResult == DialogResult.OK)
+            {
+                foreach (DataGridViewRow row in gvCodes.Rows)
+                {
+                    try
+                    {
+                        TimeSpan ts = TimeSpan.Parse(row.Cells[0].Value.ToString()).Add(offset.timeCodeOffset);
+
+                        if (ts < TimeSpan.Zero)
+                        {
+                            errorCodes.Add(row.Cells[0].Value.ToString() + "," + row.Cells[1].Value.ToString());
+                            row.Cells[0].Value = "00:00:00.000";
+                        }
+                        else
+                        {
+                            row.Cells[0].Value = ts.ToString("G").Substring(2, 12);
+                        }
+                    }
+                    catch { }
+                }
+
+                if (errorCodes.Count > 0)
+                {
+                    string errorValues = "";
+
+                    foreach (string s in errorCodes)
+                    {
+                        errorValues += s + Environment.NewLine;
+                    }
+
+                    MessageBox.Show("With your selected Offset, the following TimeCodes have become less than 00:00:00.000" + "\n\n" + errorValues + "\n\n" + "They will now be removed.", "Errors Detected", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                    for (int i = 0; i < gvCodes.Rows.Count; i++)
+                    {
+                        try
+                        {
+                            if (gvCodes.Rows[i].Cells[0].Value.ToString() == "00:00:00.000")
+                            {
+                                gvCodes.Rows.RemoveAt(i);
+                                _saved = false;
+                                i--;
+                            }
+                        }
+                        catch { }
+                    }
+
+                    UpdateCodeCount();
+                }
+            }
+        }
+
         private void SetDarkMode()
         {
             BackColor = Color.FromArgb(45, 45, 45);
@@ -908,6 +969,9 @@ namespace WindTrackCreator
 
             DataGridViewButtonColumn delete = (DataGridViewButtonColumn)gvCodes.Columns["Delete"];
             delete.FlatStyle = FlatStyle.Popup;
+
+            menuStrip.BackColor = Color.FromArgb(45, 45, 45);
+            menuStrip.ForeColor = Color.White;
         }
 
         private void SetLightMode()
@@ -970,6 +1034,9 @@ namespace WindTrackCreator
 
             DataGridViewButtonColumn delete = (DataGridViewButtonColumn)gvCodes.Columns["Delete"];
             delete.FlatStyle = _gvBtnStyle;
+
+            menuStrip.BackColor = _backColor;
+            menuStrip.ForeColor = Color.Black;
         }
     }
 }

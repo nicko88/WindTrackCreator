@@ -52,7 +52,7 @@ namespace WindTrackCreator
 
             tbWindtrackName.Text = Path.GetFileNameWithoutExtension(_windtrackPath);
 
-            CheckFFmpeg();
+            //CheckFFmpeg();
         }
 
         private void CheckFFmpeg()

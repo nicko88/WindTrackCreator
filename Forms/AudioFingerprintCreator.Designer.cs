@@ -69,6 +69,7 @@ namespace WindTrackCreator
             this.lblFFmpeg.Size = new System.Drawing.Size(78, 13);
             this.lblFFmpeg.TabIndex = 6;
             this.lblFFmpeg.Text = "FFmpeg Status";
+            this.lblFFmpeg.Visible = false;
             // 
             // lnkFFmpeg
             // 
@@ -135,7 +136,7 @@ namespace WindTrackCreator
             this.tbVideoPath.Location = new System.Drawing.Point(129, 12);
             this.tbVideoPath.Name = "tbVideoPath";
             this.tbVideoPath.ReadOnly = true;
-            this.tbVideoPath.Size = new System.Drawing.Size(319, 43);
+            this.tbVideoPath.Size = new System.Drawing.Size(425, 43);
             this.tbVideoPath.TabIndex = 13;
             this.tbVideoPath.Text = "";
             // 

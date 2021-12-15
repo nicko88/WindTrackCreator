@@ -5,7 +5,7 @@ WindTrackCreator is an application meant to help create wind tracks for the [HTF
 
 ### Screenshot
 
-<img src="https://user-images.githubusercontent.com/1866075/89132030-cca9ee80-d4d6-11ea-87bb-0f1ca061ba42.png" width="549px" />
+<img src="https://user-images.githubusercontent.com/1866075/146098864-edead907-b327-42e8-b050-95458780c9ab.png" width="549px" />
 
 ### Getting Started
 
@@ -103,4 +103,4 @@ When your wind track is uploaded to the Google Drive database, it will also beco
 
 ### Community
 
-Visit the forum thread for this project and the main HTFanControl project [here](https://www.avsforum.com/forum/28-tweaks-do-yourself/3152346-4d-theater-wind-effect-diy-home-theater-project.html).
+Visit the forum thread for this project and the main HTFanControl project [here](https://www.avsforum.com/threads/4d-theater-wind-effect-diy-home-theater-project.3152346/).

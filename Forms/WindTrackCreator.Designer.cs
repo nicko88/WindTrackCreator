@@ -74,8 +74,12 @@
             this.label3 = new System.Windows.Forms.Label();
             this.tbSpindown = new System.Windows.Forms.TextBox();
             this.btnFingerprint = new System.Windows.Forms.Button();
+            this.menuStrip = new System.Windows.Forms.MenuStrip();
+            this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.addOffsetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.gvCodes)).BeginInit();
             this.panel1.SuspendLayout();
+            this.menuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // openFileDialog
@@ -86,7 +90,7 @@
             // btnOpen
             // 
             this.btnOpen.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnOpen.Location = new System.Drawing.Point(12, 12);
+            this.btnOpen.Location = new System.Drawing.Point(12, 28);
             this.btnOpen.Name = "btnOpen";
             this.btnOpen.Size = new System.Drawing.Size(74, 26);
             this.btnOpen.TabIndex = 1;
@@ -98,7 +102,7 @@
             // 
             this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSave.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnSave.Location = new System.Drawing.Point(458, 12);
+            this.btnSave.Location = new System.Drawing.Point(458, 28);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(77, 26);
             this.btnSave.TabIndex = 2;
@@ -111,7 +115,7 @@
             this.lblFilePath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblFilePath.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblFilePath.Location = new System.Drawing.Point(92, 8);
+            this.lblFilePath.Location = new System.Drawing.Point(92, 24);
             this.lblFilePath.Name = "lblFilePath";
             this.lblFilePath.Size = new System.Drawing.Size(360, 32);
             this.lblFilePath.TabIndex = 3;
@@ -158,11 +162,11 @@
             dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.gvCodes.DefaultCellStyle = dataGridViewCellStyle4;
             this.gvCodes.EnableHeadersVisualStyles = false;
-            this.gvCodes.Location = new System.Drawing.Point(12, 207);
+            this.gvCodes.Location = new System.Drawing.Point(12, 223);
             this.gvCodes.MultiSelect = false;
             this.gvCodes.Name = "gvCodes";
             this.gvCodes.RowHeadersVisible = false;
-            this.gvCodes.Size = new System.Drawing.Size(523, 659);
+            this.gvCodes.Size = new System.Drawing.Size(523, 643);
             this.gvCodes.TabIndex = 5;
             this.gvCodes.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.gvCodes_CellContentClick);
             this.gvCodes.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.gvCodes_CellEndEdit);
@@ -229,7 +233,7 @@
             // tbIP
             // 
             this.tbIP.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbIP.Location = new System.Drawing.Point(199, 43);
+            this.tbIP.Location = new System.Drawing.Point(199, 59);
             this.tbIP.Name = "tbIP";
             this.tbIP.Size = new System.Drawing.Size(100, 22);
             this.tbIP.TabIndex = 8;
@@ -238,7 +242,7 @@
             // tbPort
             // 
             this.tbPort.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbPort.Location = new System.Drawing.Point(343, 43);
+            this.tbPort.Location = new System.Drawing.Point(343, 59);
             this.tbPort.Name = "tbPort";
             this.tbPort.Size = new System.Drawing.Size(50, 22);
             this.tbPort.TabIndex = 9;
@@ -248,7 +252,7 @@
             // 
             this.lblIP.AutoSize = true;
             this.lblIP.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblIP.Location = new System.Drawing.Point(176, 46);
+            this.lblIP.Location = new System.Drawing.Point(176, 62);
             this.lblIP.Name = "lblIP";
             this.lblIP.Size = new System.Drawing.Size(23, 16);
             this.lblIP.TabIndex = 10;
@@ -258,7 +262,7 @@
             // 
             this.lblPort.AutoSize = true;
             this.lblPort.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblPort.Location = new System.Drawing.Point(308, 46);
+            this.lblPort.Location = new System.Drawing.Point(308, 62);
             this.lblPort.Name = "lblPort";
             this.lblPort.Size = new System.Drawing.Size(35, 16);
             this.lblPort.TabIndex = 11;
@@ -267,7 +271,7 @@
             // btnOFF
             // 
             this.btnOFF.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnOFF.Location = new System.Drawing.Point(11, 103);
+            this.btnOFF.Location = new System.Drawing.Point(11, 119);
             this.btnOFF.Name = "btnOFF";
             this.btnOFF.Size = new System.Drawing.Size(100, 26);
             this.btnOFF.TabIndex = 12;
@@ -279,7 +283,7 @@
             // btnECO
             // 
             this.btnECO.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnECO.Location = new System.Drawing.Point(117, 103);
+            this.btnECO.Location = new System.Drawing.Point(117, 119);
             this.btnECO.Name = "btnECO";
             this.btnECO.Size = new System.Drawing.Size(100, 26);
             this.btnECO.TabIndex = 13;
@@ -291,7 +295,7 @@
             // btnLOW
             // 
             this.btnLOW.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnLOW.Location = new System.Drawing.Point(223, 103);
+            this.btnLOW.Location = new System.Drawing.Point(223, 119);
             this.btnLOW.Name = "btnLOW";
             this.btnLOW.Size = new System.Drawing.Size(100, 26);
             this.btnLOW.TabIndex = 14;
@@ -303,7 +307,7 @@
             // btnMED
             // 
             this.btnMED.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnMED.Location = new System.Drawing.Point(329, 103);
+            this.btnMED.Location = new System.Drawing.Point(329, 119);
             this.btnMED.Name = "btnMED";
             this.btnMED.Size = new System.Drawing.Size(100, 26);
             this.btnMED.TabIndex = 15;
@@ -315,7 +319,7 @@
             // btnHIGH
             // 
             this.btnHIGH.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnHIGH.Location = new System.Drawing.Point(435, 103);
+            this.btnHIGH.Location = new System.Drawing.Point(435, 119);
             this.btnHIGH.Name = "btnHIGH";
             this.btnHIGH.Size = new System.Drawing.Size(100, 26);
             this.btnHIGH.TabIndex = 16;
@@ -334,7 +338,7 @@
             this.tbHeader.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tbHeader.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbHeader.Location = new System.Drawing.Point(12, 135);
+            this.tbHeader.Location = new System.Drawing.Point(12, 151);
             this.tbHeader.Name = "tbHeader";
             this.tbHeader.Size = new System.Drawing.Size(523, 66);
             this.tbHeader.TabIndex = 17;
@@ -344,7 +348,7 @@
             // 
             this.cbAutosave.AutoSize = true;
             this.cbAutosave.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbAutosave.Location = new System.Drawing.Point(448, 40);
+            this.cbAutosave.Location = new System.Drawing.Point(448, 56);
             this.cbAutosave.Name = "cbAutosave";
             this.cbAutosave.Size = new System.Drawing.Size(84, 20);
             this.cbAutosave.TabIndex = 18;
@@ -357,7 +361,7 @@
             // 
             this.cbHotkeys.AutoSize = true;
             this.cbHotkeys.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbHotkeys.Location = new System.Drawing.Point(448, 81);
+            this.cbHotkeys.Location = new System.Drawing.Point(448, 97);
             this.cbHotkeys.Name = "cbHotkeys";
             this.cbHotkeys.Size = new System.Drawing.Size(77, 20);
             this.cbHotkeys.TabIndex = 19;
@@ -368,7 +372,7 @@
             // tbUsername
             // 
             this.tbUsername.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbUsername.Location = new System.Drawing.Point(86, 73);
+            this.tbUsername.Location = new System.Drawing.Point(86, 89);
             this.tbUsername.Name = "tbUsername";
             this.tbUsername.Size = new System.Drawing.Size(131, 22);
             this.tbUsername.TabIndex = 20;
@@ -377,7 +381,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(9, 76);
+            this.label1.Location = new System.Drawing.Point(9, 92);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(71, 16);
             this.label1.TabIndex = 21;
@@ -386,7 +390,7 @@
             // btnFillHeader
             // 
             this.btnFillHeader.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnFillHeader.Location = new System.Drawing.Point(329, 71);
+            this.btnFillHeader.Location = new System.Drawing.Point(329, 87);
             this.btnFillHeader.Name = "btnFillHeader";
             this.btnFillHeader.Size = new System.Drawing.Size(100, 26);
             this.btnFillHeader.TabIndex = 22;
@@ -399,7 +403,7 @@
             // 
             this.cbDarkmode.AutoSize = true;
             this.cbDarkmode.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbDarkmode.Location = new System.Drawing.Point(448, 60);
+            this.cbDarkmode.Location = new System.Drawing.Point(448, 76);
             this.cbDarkmode.Name = "cbDarkmode";
             this.cbDarkmode.Size = new System.Drawing.Size(94, 20);
             this.cbDarkmode.TabIndex = 23;
@@ -417,7 +421,7 @@
             this.lblSaved.AutoSize = true;
             this.lblSaved.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblSaved.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            this.lblSaved.Location = new System.Drawing.Point(396, 41);
+            this.lblSaved.Location = new System.Drawing.Point(396, 57);
             this.lblSaved.Name = "lblSaved";
             this.lblSaved.Size = new System.Drawing.Size(51, 16);
             this.lblSaved.TabIndex = 24;
@@ -434,7 +438,7 @@
             // 
             this.rbBluray.AutoSize = true;
             this.rbBluray.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rbBluray.Location = new System.Drawing.Point(243, 66);
+            this.rbBluray.Location = new System.Drawing.Point(243, 82);
             this.rbBluray.Name = "rbBluray";
             this.rbBluray.Size = new System.Drawing.Size(68, 20);
             this.rbBluray.TabIndex = 25;
@@ -447,7 +451,7 @@
             this.rbUHD.AutoSize = true;
             this.rbUHD.Checked = true;
             this.rbUHD.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rbUHD.Location = new System.Drawing.Point(243, 83);
+            this.rbUHD.Location = new System.Drawing.Point(243, 99);
             this.rbUHD.Name = "rbUHD";
             this.rbUHD.Size = new System.Drawing.Size(56, 20);
             this.rbUHD.TabIndex = 26;
@@ -460,7 +464,7 @@
             // 
             this.panel1.Controls.Add(this.rbMPC);
             this.panel1.Controls.Add(this.rbKodi);
-            this.panel1.Location = new System.Drawing.Point(8, 40);
+            this.panel1.Location = new System.Drawing.Point(8, 56);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(162, 27);
             this.panel1.TabIndex = 27;
@@ -484,7 +488,7 @@
             this.tbSpinup.Name = "tbSpinup";
             this.tbSpinup.Size = new System.Drawing.Size(38, 22);
             this.tbSpinup.TabIndex = 28;
-            this.tbSpinup.Text = "1500";
+            this.tbSpinup.Text = "1000";
             this.tbSpinup.TextChanged += new System.EventHandler(this.tbSpinup_TextChanged);
             // 
             // label3
@@ -506,7 +510,7 @@
             this.tbSpindown.Name = "tbSpindown";
             this.tbSpindown.Size = new System.Drawing.Size(38, 22);
             this.tbSpindown.TabIndex = 30;
-            this.tbSpindown.Text = "0";
+            this.tbSpindown.Text = "250";
             this.tbSpindown.TextChanged += new System.EventHandler(this.tbSpindown_TextChanged);
             // 
             // btnFingerprint
@@ -521,6 +525,31 @@
             this.btnFingerprint.Text = "Create Fingerprints";
             this.btnFingerprint.UseVisualStyleBackColor = true;
             this.btnFingerprint.Click += new System.EventHandler(this.btnFingerprint_Click);
+            // 
+            // menuStrip
+            // 
+            this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolsToolStripMenuItem});
+            this.menuStrip.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip.Name = "menuStrip";
+            this.menuStrip.Size = new System.Drawing.Size(547, 24);
+            this.menuStrip.TabIndex = 33;
+            this.menuStrip.Text = "menuStrip1";
+            // 
+            // toolsToolStripMenuItem
+            // 
+            this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.addOffsetToolStripMenuItem});
+            this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
+            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(46, 20);
+            this.toolsToolStripMenuItem.Text = "Tools";
+            // 
+            // addOffsetToolStripMenuItem
+            // 
+            this.addOffsetToolStripMenuItem.Name = "addOffsetToolStripMenuItem";
+            this.addOffsetToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.addOffsetToolStripMenuItem.Text = "Apply an Offset";
+            this.addOffsetToolStripMenuItem.Click += new System.EventHandler(this.addOffsetToolStripMenuItem_Click);
             // 
             // WindTrackCreator
             // 
@@ -558,7 +587,9 @@
             this.Controls.Add(this.lblFilePath);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.btnOpen);
+            this.Controls.Add(this.menuStrip);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MainMenuStrip = this.menuStrip;
             this.Name = "WindTrackCreator";
             this.Text = "Wind Track Creator";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.WindTrackCreator_FormClosing);
@@ -569,6 +600,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.gvCodes)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            this.menuStrip.ResumeLayout(false);
+            this.menuStrip.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -615,6 +648,9 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox tbSpindown;
         private System.Windows.Forms.Button btnFingerprint;
+        private System.Windows.Forms.MenuStrip menuStrip;
+        private System.Windows.Forms.ToolStripMenuItem toolsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem addOffsetToolStripMenuItem;
     }
 }
 
