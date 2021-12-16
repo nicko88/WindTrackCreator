@@ -851,8 +851,21 @@ namespace WindTrackCreator
             }
         }
 
+        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DialogResult result = saveFileDialog.ShowDialog();
+
+            if (result == DialogResult.OK)
+            {
+                lblFilePath.Text = saveFileDialog.FileName;
+                SaveFile(false);
+            }
+        }
+
         private void addOffsetToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            gvCodes.Sort(gvCodes.Columns["Delete"], ListSortDirection.Ascending);
+
             List<string> errorCodes = new List<string>();
 
             Forms.AddOffset offset = new Forms.AddOffset($"{tbIP.Text}:{tbPort.Text}");
@@ -906,6 +919,8 @@ namespace WindTrackCreator
 
                     UpdateCodeCount();
                 }
+
+                gvCodes.Sort(gvCodes.Columns["TimeCode"], ListSortDirection.Ascending);
             }
         }
 
