@@ -919,9 +919,9 @@ namespace WindTrackCreator
 
                     UpdateCodeCount();
                 }
-
-                gvCodes.Sort(gvCodes.Columns["TimeCode"], ListSortDirection.Ascending);
             }
+
+            gvCodes.Sort(gvCodes.Columns["TimeCode"], ListSortDirection.Ascending);
         }
 
         private void SetDarkMode()
