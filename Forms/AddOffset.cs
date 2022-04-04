@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Http;
 using System.Windows.Forms;
 
 namespace WindTrackCreator.Forms
@@ -57,9 +58,9 @@ namespace WindTrackCreator.Forms
             try
             {
                 string html;
-                using (var client = new WebClientWithTimeout())
+                using (HttpClient httpClient = new HttpClient())
                 {
-                    html = client.DownloadString($"http://{_MPCconn}/variables.html");
+                    html = httpClient.GetStringAsync($"http://{_MPCconn}/variables.html").Result;
                 }
 
                 HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();

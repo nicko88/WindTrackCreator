@@ -4,13 +4,16 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Reflection;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace WindTrackCreator
@@ -27,13 +30,13 @@ namespace WindTrackCreator
         private string _videoLength;
         private string _videoPath;
 
-        Color _backColor;
-        Color _foreColor;
-        Color _btnBackColor;
-        Color _btnForeColor;
-        Color _gvBackColor;
-        Color _gvHeaderBackColor;
-        FlatStyle _gvBtnStyle;
+        private Color _backColor;
+        private Color _foreColor;
+        private Color _btnBackColor;
+        private Color _btnForeColor;
+        private Color _gvBackColor;
+        private Color _gvHeaderBackColor;
+        private FlatStyle _gvBtnStyle;
 
         public WindTrackCreator()
         {
@@ -44,7 +47,7 @@ namespace WindTrackCreator
 
             SaveDefaultColor();
 
-            string version = Assembly.GetExecutingAssembly().GetName().Version.ToString(3).Replace(".0", "");
+            string version = Assembly.GetExecutingAssembly().GetName().Version.ToString().TrimEnd(new char[] { '.', '0' });
             Text += " v" + version;
 
             DataTable fanTable = new DataTable();
@@ -77,7 +80,7 @@ namespace WindTrackCreator
             _gvBtnStyle = seek.FlatStyle;
         }
 
-        private void WindTrackCreator_Load(object sender, EventArgs e)
+        private async void WindTrackCreator_Load(object sender, EventArgs e)
         {
             _hookNum0 = new KeyboardHook(Constants.NOMOD, Keys.NumPad0, this);
             _hookNum1 = new KeyboardHook(Constants.NOMOD, Keys.NumPad1, this);
@@ -88,6 +91,8 @@ namespace WindTrackCreator
             LoadProgramSettings();
 
             _saved = true;
+
+            await CheckNewVersion();
         }
 
         private void RegisterKeys()
@@ -128,28 +133,42 @@ namespace WindTrackCreator
             {
                 tbIP.Text = IP;
             }
-
             if (!string.IsNullOrEmpty(Port))
             {
                 tbPort.Text = Port;
             }
 
             string username = Util.WinRegistry.GetRegKey("SOFTWARE\\WindTrackCreator", "Username");
-
             if (!string.IsNullOrEmpty(username))
             {
                 tbUsername.Text = username;
             }
 
-            string spinup = Util.WinRegistry.GetRegKey("SOFTWARE\\WindTrackCreator", "Spinup");
-
-            if (!string.IsNullOrEmpty(spinup))
+            string ECOSpinup = Util.WinRegistry.GetRegKey("SOFTWARE\\WindTrackCreator", "ECOSpinUp");
+            if (!string.IsNullOrEmpty(ECOSpinup))
             {
-                tbSpinup.Text = spinup;
+                tbECOSpinup.Text = ECOSpinup;
+            }
+
+            string LOWSpinup = Util.WinRegistry.GetRegKey("SOFTWARE\\WindTrackCreator", "LOWSpinUp");
+            if (!string.IsNullOrEmpty(LOWSpinup))
+            {
+                tbLOWSpinup.Text = LOWSpinup;
+            }
+
+            string MEDSpinup = Util.WinRegistry.GetRegKey("SOFTWARE\\WindTrackCreator", "MEDSpinUp");
+            if (!string.IsNullOrEmpty(MEDSpinup))
+            {
+                tbMEDSpinup.Text = MEDSpinup;
+            }
+
+            string HIGHSpinup = Util.WinRegistry.GetRegKey("SOFTWARE\\WindTrackCreator", "HIGHSpinUp");
+            if (!string.IsNullOrEmpty(HIGHSpinup))
+            {
+                tbHIGHSpinup.Text = HIGHSpinup;
             }
 
             string spindown = Util.WinRegistry.GetRegKey("SOFTWARE\\WindTrackCreator", "Spindown");
-
             if (!string.IsNullOrEmpty(spindown))
             {
                 tbSpindown.Text = spindown;
@@ -183,7 +202,16 @@ namespace WindTrackCreator
             key.SetValue("Username", tbUsername.Text);
 
             key = Registry.CurrentUser.CreateSubKey("SOFTWARE\\WindTrackCreator", true);
-            key.SetValue("Spinup", tbSpinup.Text);
+            key.SetValue("ECOSpinUp", tbECOSpinup.Text);
+
+            key = Registry.CurrentUser.CreateSubKey("SOFTWARE\\WindTrackCreator", true);
+            key.SetValue("LOWSpinUp", tbLOWSpinup.Text);
+
+            key = Registry.CurrentUser.CreateSubKey("SOFTWARE\\WindTrackCreator", true);
+            key.SetValue("MEDSpinUp", tbMEDSpinup.Text);
+
+            key = Registry.CurrentUser.CreateSubKey("SOFTWARE\\WindTrackCreator", true);
+            key.SetValue("HIGHSpinUp", tbHIGHSpinup.Text);
 
             key = Registry.CurrentUser.CreateSubKey("SOFTWARE\\WindTrackCreator", true);
             key.SetValue("Spindown", tbSpindown.Text);
@@ -218,6 +246,35 @@ namespace WindTrackCreator
             }
 
             base.WndProc(ref m);
+        }
+
+        private Keys GetKey(IntPtr LParam)
+        {
+            return (Keys)((LParam.ToInt32()) >> 16);
+        }
+
+        private async Task CheckNewVersion()
+        {
+            using (HttpClient httpClient = new HttpClient())
+            {
+                try
+                {
+                    httpClient.DefaultRequestHeaders.Add("User-Agent", ".netapp");
+                    string releaseJSON = await httpClient.GetStringAsync("https://api.github.com/repos/nicko88/windtrackcreator/releases/latest");
+                    JObject data = JObject.Parse(releaseJSON);
+                    string latest = (string)data["tag_name"];
+
+                    string version = "v" + Assembly.GetExecutingAssembly().GetName().Version.ToString().TrimEnd(new char[] { '.', '0' });
+
+                    if (version != latest)
+                    {
+                        lnkNewVersion.Text = latest;
+                        lnkNewVersion.Visible = true;
+                        lblNewVersion.Visible = true;
+                    }
+                }
+                catch { }
+            }
         }
 
         private void AddCode(string fanSpeed)
@@ -268,9 +325,9 @@ namespace WindTrackCreator
                 try
                 {
                     string html;
-                    using (var client = new WebClientWithTimeout())
+                    using (HttpClient httpClient = new HttpClient())
                     {
-                        html = client.DownloadString($"http://{tbIP.Text}:{tbPort.Text}/variables.html");
+                        html = httpClient.GetStringAsync($"http://{tbIP.Text}:{tbPort.Text}/variables.html").Result;
                     }
 
                     HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
@@ -306,15 +363,21 @@ namespace WindTrackCreator
                     string timeJSONRequest = @"{""jsonrpc"": ""2.0"", ""method"": ""Player.GetProperties"", ""params"": {""properties"": [""time"", ""speed""], ""playerid"": 1}, ""id"": 1}";
                     string filenameJSONRequest = @"{""jsonrpc"": ""2.0"", ""method"": ""Player.GetItem"", ""params"": {""properties"": [""file""], ""playerid"": 1}, ""id"": 1 }";
                     string runtimeJSONRequest = @"{""jsonrpc"": ""2.0"", ""method"": ""Player.GetItem"", ""params"": { ""properties"": [""runtime""], ""playerid"": 1 }, ""id"": 0 }";
+
                     string timeJSONResponse;
                     string filenameJSONResponse;
                     string runtimeJSONRespoonse;
 
-                    using (var webClient = new WebClientWithTimeout())
+                    using (HttpClient httpClient = new HttpClient())
                     {
-                        timeJSONResponse = webClient.UploadString($"http://{tbIP.Text}:{tbPort.Text}/jsonrpc", "POST", timeJSONRequest);
-                        filenameJSONResponse = webClient.UploadString($"http://{tbIP.Text}:{tbPort.Text}/jsonrpc", "POST", filenameJSONRequest);
-                        runtimeJSONRespoonse = webClient.UploadString($"http://{tbIP.Text}:{tbPort.Text}/jsonrpc", "POST", runtimeJSONRequest);
+                        StringContent jsonContent = new StringContent(timeJSONRequest, Encoding.UTF8, "application/json");
+                        timeJSONResponse = httpClient.PostAsync($"http://{tbIP.Text}:{tbPort.Text}/jsonrpc", jsonContent).Result.Content.ReadAsStringAsync().Result;
+
+                        jsonContent = new StringContent(filenameJSONRequest, Encoding.UTF8, "application/json");
+                        filenameJSONResponse = httpClient.PostAsync($"http://{tbIP.Text}:{tbPort.Text}/jsonrpc", jsonContent).Result.Content.ReadAsStringAsync().Result;
+
+                        jsonContent = new StringContent(runtimeJSONRequest, Encoding.UTF8, "application/json");
+                        runtimeJSONRespoonse = httpClient.PostAsync($"http://{tbIP.Text}:{tbPort.Text}/jsonrpc", jsonContent).Result.Content.ReadAsStringAsync().Result;
                     }
 
                     JObject time = JObject.Parse(timeJSONResponse);
@@ -352,13 +415,9 @@ namespace WindTrackCreator
             return null;
         }
 
-        private Keys GetKey(IntPtr LParam)
+        private async void btnOpen_Click(object sender, EventArgs e)
         {
-            return (Keys)((LParam.ToInt32()) >> 16);
-        }
-
-        private void btnOpen_Click(object sender, EventArgs e)
-        {
+            gvCodes.Enabled = false;
             DialogResult result = openFileDialog.ShowDialog();
 
             if(result == DialogResult.OK)
@@ -366,6 +425,9 @@ namespace WindTrackCreator
                 lblFilePath.Text = openFileDialog.FileName;
                 LoadFile(openFileDialog.FileName);
             }
+
+            await Task.Delay(1000);
+            gvCodes.Enabled = true;
         }
 
         private void LoadFile(string filePath)
@@ -474,11 +536,7 @@ namespace WindTrackCreator
 
         private void btnFillHeader_Click(object sender, EventArgs e)
         {
-            string time = "";
-            if (_videoLength is null)
-            {
-                time = GetTime(true);
-            }
+            string time = GetTime(true);
 
             if(time != null)
             {
@@ -514,7 +572,7 @@ namespace WindTrackCreator
             }
         }
 
-        private void gvCodes_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void gvCodes_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             DataGridView senderGrid = (DataGridView)sender;
 
@@ -547,18 +605,10 @@ namespace WindTrackCreator
             {
                 try
                 {
-                    WebRequest request = WebRequest.Create($"http://{tbIP.Text}:{tbPort.Text}/command.html");
-                    string postData = "wm_command=-1&position=" + timeCode;
-
-                    byte[] data = Encoding.ASCII.GetBytes(postData);
-
-                    request.Method = "POST";
-                    request.ContentType = "application/x-www-form-urlencoded";
-                    request.ContentLength = data.Length;
-
-                    using (Stream stream = request.GetRequestStream())
+                    using (HttpClient httpClient = new HttpClient())
                     {
-                        stream.Write(data, 0, data.Length);
+                        StringContent postContent = new StringContent($"wm_command=-1&position={timeCode}", Encoding.UTF8, "application/x-www-form-urlencoded");
+                        _ = httpClient.PostAsync($"http://{tbIP.Text}:{tbPort.Text}/command.html", postContent).Result;
                     }
                 }
                 catch
@@ -570,18 +620,12 @@ namespace WindTrackCreator
             {
                 try
                 {
-                    WebRequest request = WebRequest.Create($"http://{tbIP.Text}:{tbPort.Text}/jsonrpc");
-                    string postData = $@"{{""jsonrpc"":""2.0"", ""method"":""Player.Seek"", ""params"": {{ ""playerid"":1, ""value"":{{ ""hours"": {TimeSpan.Parse(timeCode).Hours}, ""minutes"": {TimeSpan.Parse(timeCode).Minutes}, ""seconds"": {TimeSpan.Parse(timeCode).Seconds}, ""milliseconds"": {TimeSpan.Parse(timeCode).Milliseconds} }} }}, ""id"":1}}";
+                    string postData = $@"{{""jsonrpc"": ""2.0"", ""method"": ""Player.Seek"", ""params"": {{ ""playerid"": 1, ""value"": {{ ""time"": {{ ""hours"": {TimeSpan.Parse(timeCode).Hours}, ""minutes"": {TimeSpan.Parse(timeCode).Minutes}, ""seconds"": {TimeSpan.Parse(timeCode).Seconds}, ""milliseconds"": {TimeSpan.Parse(timeCode).Milliseconds} }} }} }}, ""id"": 1}}";
 
-                    byte[] data = Encoding.ASCII.GetBytes(postData);
-
-                    request.Method = "POST";
-                    request.ContentType = "application/json";
-                    request.ContentLength = data.Length;
-
-                    using (Stream stream = request.GetRequestStream())
+                    using (HttpClient httpClient = new HttpClient())
                     {
-                        stream.Write(data, 0, data.Length);
+                        StringContent jsonContent = new StringContent(postData, Encoding.UTF8, "application/json");
+                        _ = httpClient.PostAsync($"http://{tbIP.Text}:{tbPort.Text}/jsonrpc", jsonContent).Result;
                     }
                 }
                 catch
@@ -595,12 +639,34 @@ namespace WindTrackCreator
         {
             double prevTime = -500;
             string prevCMD = "";
-            int spinup = 0;
+
+            int ECOSpinup = 0;
+            int LOWSpinup = 0;
+            int MEDSpinup = 0;
+            int HIGHSpinup = 0;
             int spindown = 0;
 
             try
             {
-                spinup = Convert.ToInt32(tbSpinup.Text);
+                ECOSpinup = Convert.ToInt32(tbECOSpinup.Text);
+            }
+            catch { }
+
+            try
+            {
+                LOWSpinup = Convert.ToInt32(tbLOWSpinup.Text);
+            }
+            catch { }
+
+            try
+            {
+                MEDSpinup = Convert.ToInt32(tbMEDSpinup.Text);
+            }
+            catch { }
+
+            try
+            {
+                HIGHSpinup = Convert.ToInt32(tbHIGHSpinup.Text);
             }
             catch { }
 
@@ -632,7 +698,25 @@ namespace WindTrackCreator
 
                         if (prevCMD == "OFF")
                         {
-                            if (time - prevTime < spinup + 500)
+                            if (CMD == "ECO" && time - prevTime < ECOSpinup + 500)
+                            {
+                                row.DefaultCellStyle.BackColor = Color.FromArgb(255, 255, 128);
+                                row.DefaultCellStyle.ForeColor = Color.Black;
+                            }
+
+                            if (CMD == "LOW" && time - prevTime < LOWSpinup + 500)
+                            {
+                                row.DefaultCellStyle.BackColor = Color.FromArgb(255, 255, 128);
+                                row.DefaultCellStyle.ForeColor = Color.Black;
+                            }
+
+                            if (CMD == "MED" && time - prevTime < MEDSpinup + 500)
+                            {
+                                row.DefaultCellStyle.BackColor = Color.FromArgb(255, 255, 128);
+                                row.DefaultCellStyle.ForeColor = Color.Black;
+                            }
+
+                            if (CMD == "HIGH" && time - prevTime < HIGHSpinup + 500)
                             {
                                 row.DefaultCellStyle.BackColor = Color.FromArgb(255, 255, 128);
                                 row.DefaultCellStyle.ForeColor = Color.Black;
@@ -829,16 +913,17 @@ namespace WindTrackCreator
             ColorGrid();
         }
 
-        private void tbSpindown_TextChanged(object sender, EventArgs e)
-        {
-            ColorGrid();
-        }
-
         private void btnFingerprint_Click(object sender, EventArgs e)
         {
             try
             {
                 GetTime(false);
+            }
+            catch { }
+
+            try
+            {
+                SaveFile(true);
             }
             catch { }
 
@@ -922,6 +1007,7 @@ namespace WindTrackCreator
             }
 
             gvCodes.Sort(gvCodes.Columns["TimeCode"], ListSortDirection.Ascending);
+            ColorGrid();
         }
 
         private void SetDarkMode()
@@ -965,11 +1051,22 @@ namespace WindTrackCreator
             tbUsername.BackColor = Color.Black;
             tbUsername.ForeColor = Color.White;
 
-            tbSpinup.BackColor = Color.Black;
-            tbSpinup.ForeColor = Color.White;
+            tbECOSpinup.BackColor = Color.Black;
+            tbECOSpinup.ForeColor = Color.White;
+
+            tbLOWSpinup.BackColor = Color.Black;
+            tbLOWSpinup.ForeColor = Color.White;
+
+            tbMEDSpinup.BackColor = Color.Black;
+            tbMEDSpinup.ForeColor = Color.White;
+
+            tbHIGHSpinup.BackColor = Color.Black;
+            tbHIGHSpinup.ForeColor = Color.White;
 
             tbSpindown.BackColor = Color.Black;
             tbSpindown.ForeColor = Color.White;
+
+            gbOffsets.ForeColor = Color.White;
 
             tbHeader.BackColor = Color.Black;
             tbHeader.ForeColor = Color.White;
@@ -1030,11 +1127,22 @@ namespace WindTrackCreator
             tbUsername.BackColor = Color.White;
             tbUsername.ForeColor = Color.Black;
 
-            tbSpinup.BackColor = Color.White;
-            tbSpinup.ForeColor = Color.Black;
+            tbECOSpinup.BackColor = Color.White;
+            tbECOSpinup.ForeColor = Color.Black;
+
+            tbLOWSpinup.BackColor = Color.White;
+            tbLOWSpinup.ForeColor = Color.Black;
+
+            tbMEDSpinup.BackColor = Color.White;
+            tbMEDSpinup.ForeColor = Color.Black;
+
+            tbHIGHSpinup.BackColor = Color.White;
+            tbHIGHSpinup.ForeColor = Color.Black;
 
             tbSpindown.BackColor = Color.White;
             tbSpindown.ForeColor = Color.Black;
+
+            gbOffsets.ForeColor = Color.Black;
 
             tbHeader.BackColor = Color.White;
             tbHeader.ForeColor = Color.Black;
@@ -1052,6 +1160,11 @@ namespace WindTrackCreator
 
             menuStrip.BackColor = _backColor;
             menuStrip.ForeColor = Color.Black;
+        }
+
+        private void lnkNewVersion_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start($"https://github.com/nicko88/WindTrackCreator/releases/latest");
         }
     }
 }

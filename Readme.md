@@ -5,21 +5,21 @@ WindTrackCreator is an application meant to help create wind tracks for the [HTF
 
 ### Screenshot
 
-<img src="https://user-images.githubusercontent.com/1866075/146098864-edead907-b327-42e8-b050-95458780c9ab.png" width="549px" />
+<img src="https://user-images.githubusercontent.com/1866075/161363253-bd414591-45f1-48ce-8d6c-6ad10f903a98.png" width="549px" />
 
 ### Getting Started
 
 * Open up WindTrackCreator.
 * Load the movie you want to work on in your MPC-HC/BE or Kodi media player.
 * Enter in the connection information for your media player.
-* Seek through the movie and press the OFF, ECO, LOW, MED, and HIGH buttons (or their cooresponding numpad hotkeys) to insert fan commands at that time.
+* Seek through the movie and press the OFF, ECO, LOW, MED, and HIGH buttons (or their corresponding numpad hotkeys) to insert fan commands at that time.
 * You can click the Seek button to jump to an existing fan command time.
 * Don't forget to save your work when you are done.
 * After you are done creating the Wind Track, proceed top creating the Audio Fingerprints.
 
-The spinup and spindown offset numbers at the bottom are just there to help you format your command times with reasonable timing gaps.  Time code lines will highlight in red if 2 commands are closer than 500ms from each other and lines will highlight in yellow if the spinup (commands following an OFF) or spindown (OFF commands) times when subtracted from the time code would put the time code closer than 500ms to the previous command.
+The SpinUp and SpinDown offset numbers at the bottom are just there to help you format your command times with reasonable timing gaps.  Time code lines will highlight in red if 2 commands are closer than 500ms from each other, and lines will highlight in yellow if the SpinUp time (commands following an OFF) or SpinDown time (commands before an OFF) when subtracted from the time code would put the time code closer than 500ms to the previous command.
 
-It is recommended to not place 2 time codes closer than 500ms apart or to place spinup and spindown commands closer than their set times plus 500ms.  If this happens, HTFanControl will simply round the next time code to be exactly 500ms after the previous one, so nothing too terrible will happen, just your commands wont be sent to the fans exactly when you expected them to be.
+It is recommended to not place 2 time codes closer than 500ms apart or to place SpinUp or SpinDown commands closer than their set times plus 500ms.  If this happens, HTFanControl will simply round the next time code to be exactly 500ms after the previous one, so nothing too terrible will happen, just your commands won't be sent to the fans *exactly* when you wanted them to be.
 
 ### Wind Track File Format
 
@@ -94,6 +94,9 @@ Finally, click the "Create" button and wait for the process to finish.
 
 When the process finishes successfully you will get a message popup, and your Wind Track Package file will be located in the "windtracks" folder located next to WindTrackCreator.exe
 
+### How To Make Good WindTracks
+
+[Click Here](https://github.com/nicko88/WindTrackCreator/wiki/Tips-For-Making-Windtracks) for a great guide on how to write good WindTracks, by [brazen1](https://www.avsforum.com/members/brazen1.7947094/).
 
 ### Sharing Your Wind Track Package Files
 

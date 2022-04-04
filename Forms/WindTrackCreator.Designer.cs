@@ -70,18 +70,28 @@
             this.rbUHD = new System.Windows.Forms.RadioButton();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
-            this.tbSpinup = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.tbSpindown = new System.Windows.Forms.TextBox();
+            this.tbECOSpinup = new System.Windows.Forms.TextBox();
             this.btnFingerprint = new System.Windows.Forms.Button();
             this.menuStrip = new System.Windows.Forms.MenuStrip();
-            this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.addOffsetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.addOffsetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.gbOffsets = new System.Windows.Forms.GroupBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.tbSpindown = new System.Windows.Forms.TextBox();
+            this.tbHIGHSpinup = new System.Windows.Forms.TextBox();
+            this.tbMEDSpinup = new System.Windows.Forms.TextBox();
+            this.tbLOWSpinup = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.lnkNewVersion = new System.Windows.Forms.LinkLabel();
+            this.lblNewVersion = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.gvCodes)).BeginInit();
             this.panel1.SuspendLayout();
             this.menuStrip.SuspendLayout();
+            this.gbOffsets.SuspendLayout();
             this.SuspendLayout();
             // 
             // openFileDialog
@@ -127,11 +137,12 @@
             // 
             this.lblCommandCount.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblCommandCount.AutoSize = true;
-            this.lblCommandCount.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblCommandCount.Location = new System.Drawing.Point(9, 887);
+            this.lblCommandCount.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblCommandCount.Location = new System.Drawing.Point(8, 906);
             this.lblCommandCount.Name = "lblCommandCount";
-            this.lblCommandCount.Size = new System.Drawing.Size(0, 16);
+            this.lblCommandCount.Size = new System.Drawing.Size(161, 18);
             this.lblCommandCount.TabIndex = 4;
+            this.lblCommandCount.Text = "Total Commands: XXX";
             // 
             // gvCodes
             // 
@@ -168,10 +179,10 @@
             this.gvCodes.MultiSelect = false;
             this.gvCodes.Name = "gvCodes";
             this.gvCodes.RowHeadersVisible = false;
-            this.gvCodes.Size = new System.Drawing.Size(523, 643);
+            this.gvCodes.Size = new System.Drawing.Size(523, 665);
             this.gvCodes.TabIndex = 5;
-            this.gvCodes.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.gvCodes_CellContentClick);
             this.gvCodes.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.gvCodes_CellEndEdit);
+            this.gvCodes.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.gvCodes_CellMouseClick);
             this.gvCodes.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.gvCodes_RowsAdded);
             // 
             // TimeCode
@@ -473,56 +484,33 @@
             // 
             // label2
             // 
-            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(313, 869);
+            this.label2.Location = new System.Drawing.Point(8, 15);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(58, 36);
+            this.label2.Size = new System.Drawing.Size(36, 16);
             this.label2.TabIndex = 29;
-            this.label2.Text = "Spinup Offset:";
+            this.label2.Text = "ECO";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // tbSpinup
+            // tbECOSpinup
             // 
-            this.tbSpinup.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbSpinup.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbSpinup.Location = new System.Drawing.Point(377, 876);
-            this.tbSpinup.Name = "tbSpinup";
-            this.tbSpinup.Size = new System.Drawing.Size(38, 22);
-            this.tbSpinup.TabIndex = 28;
-            this.tbSpinup.Text = "1000";
-            this.tbSpinup.TextChanged += new System.EventHandler(this.tbSpinup_TextChanged);
-            // 
-            // label3
-            // 
-            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(421, 869);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(70, 36);
-            this.label3.TabIndex = 31;
-            this.label3.Text = "Spindown Offset:";
-            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // tbSpindown
-            // 
-            this.tbSpindown.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbSpindown.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbSpindown.Location = new System.Drawing.Point(497, 876);
-            this.tbSpindown.Name = "tbSpindown";
-            this.tbSpindown.Size = new System.Drawing.Size(38, 22);
-            this.tbSpindown.TabIndex = 30;
-            this.tbSpindown.Text = "250";
-            this.tbSpindown.TextChanged += new System.EventHandler(this.tbSpindown_TextChanged);
+            this.tbECOSpinup.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbECOSpinup.Location = new System.Drawing.Point(6, 33);
+            this.tbECOSpinup.Name = "tbECOSpinup";
+            this.tbECOSpinup.Size = new System.Drawing.Size(38, 22);
+            this.tbECOSpinup.TabIndex = 28;
+            this.tbECOSpinup.Text = "1400";
+            this.tbECOSpinup.TextChanged += new System.EventHandler(this.tbSpinup_TextChanged);
             // 
             // btnFingerprint
             // 
-            this.btnFingerprint.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnFingerprint.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.btnFingerprint.Enabled = false;
             this.btnFingerprint.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnFingerprint.Location = new System.Drawing.Point(167, 872);
+            this.btnFingerprint.Location = new System.Drawing.Point(168, 905);
             this.btnFingerprint.Name = "btnFingerprint";
-            this.btnFingerprint.Size = new System.Drawing.Size(132, 33);
+            this.btnFingerprint.Size = new System.Drawing.Size(109, 44);
             this.btnFingerprint.TabIndex = 32;
             this.btnFingerprint.Text = "Create Fingerprints";
             this.btnFingerprint.UseVisualStyleBackColor = true;
@@ -535,51 +523,178 @@
             this.toolsToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
-            this.menuStrip.Size = new System.Drawing.Size(547, 24);
+            this.menuStrip.Size = new System.Drawing.Size(547, 25);
             this.menuStrip.TabIndex = 33;
             this.menuStrip.Text = "menuStrip1";
-            // 
-            // toolsToolStripMenuItem
-            // 
-            this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.addOffsetToolStripMenuItem});
-            this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(46, 20);
-            this.toolsToolStripMenuItem.Text = "Tools";
-            // 
-            // addOffsetToolStripMenuItem
-            // 
-            this.addOffsetToolStripMenuItem.Name = "addOffsetToolStripMenuItem";
-            this.addOffsetToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.addOffsetToolStripMenuItem.Text = "Apply an Offset";
-            this.addOffsetToolStripMenuItem.Click += new System.EventHandler(this.addOffsetToolStripMenuItem_Click);
             // 
             // fileToolStripMenuItem
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.saveAsToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(39, 21);
             this.fileToolStripMenuItem.Text = "File";
             // 
             // saveAsToolStripMenuItem
             // 
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
             this.saveAsToolStripMenuItem.Text = "Save As...";
             this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
+            // 
+            // toolsToolStripMenuItem
+            // 
+            this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.addOffsetToolStripMenuItem});
+            this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
+            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(51, 21);
+            this.toolsToolStripMenuItem.Text = "Tools";
+            // 
+            // addOffsetToolStripMenuItem
+            // 
+            this.addOffsetToolStripMenuItem.Name = "addOffsetToolStripMenuItem";
+            this.addOffsetToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+            this.addOffsetToolStripMenuItem.Text = "Apply an Offset";
+            this.addOffsetToolStripMenuItem.Click += new System.EventHandler(this.addOffsetToolStripMenuItem_Click);
+            // 
+            // gbOffsets
+            // 
+            this.gbOffsets.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.gbOffsets.Controls.Add(this.label3);
+            this.gbOffsets.Controls.Add(this.tbSpindown);
+            this.gbOffsets.Controls.Add(this.tbHIGHSpinup);
+            this.gbOffsets.Controls.Add(this.tbMEDSpinup);
+            this.gbOffsets.Controls.Add(this.tbLOWSpinup);
+            this.gbOffsets.Controls.Add(this.label6);
+            this.gbOffsets.Controls.Add(this.label5);
+            this.gbOffsets.Controls.Add(this.tbECOSpinup);
+            this.gbOffsets.Controls.Add(this.label4);
+            this.gbOffsets.Controls.Add(this.label2);
+            this.gbOffsets.Location = new System.Drawing.Point(283, 894);
+            this.gbOffsets.Name = "gbOffsets";
+            this.gbOffsets.Size = new System.Drawing.Size(252, 62);
+            this.gbOffsets.TabIndex = 34;
+            this.gbOffsets.TabStop = false;
+            this.gbOffsets.Text = "SpinUp Offsets:";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(182, 14);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(69, 16);
+            this.label3.TabIndex = 37;
+            this.label3.Text = "SpinDown";
+            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // tbSpindown
+            // 
+            this.tbSpindown.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbSpindown.Location = new System.Drawing.Point(196, 33);
+            this.tbSpindown.Name = "tbSpindown";
+            this.tbSpindown.Size = new System.Drawing.Size(38, 22);
+            this.tbSpindown.TabIndex = 36;
+            this.tbSpindown.Text = "250";
+            // 
+            // tbHIGHSpinup
+            // 
+            this.tbHIGHSpinup.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbHIGHSpinup.Location = new System.Drawing.Point(138, 33);
+            this.tbHIGHSpinup.Name = "tbHIGHSpinup";
+            this.tbHIGHSpinup.Size = new System.Drawing.Size(38, 22);
+            this.tbHIGHSpinup.TabIndex = 35;
+            this.tbHIGHSpinup.Text = "800";
+            this.tbHIGHSpinup.TextChanged += new System.EventHandler(this.tbSpinup_TextChanged);
+            // 
+            // tbMEDSpinup
+            // 
+            this.tbMEDSpinup.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbMEDSpinup.Location = new System.Drawing.Point(94, 33);
+            this.tbMEDSpinup.Name = "tbMEDSpinup";
+            this.tbMEDSpinup.Size = new System.Drawing.Size(38, 22);
+            this.tbMEDSpinup.TabIndex = 34;
+            this.tbMEDSpinup.Text = "1000";
+            this.tbMEDSpinup.TextChanged += new System.EventHandler(this.tbSpinup_TextChanged);
+            // 
+            // tbLOWSpinup
+            // 
+            this.tbLOWSpinup.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbLOWSpinup.Location = new System.Drawing.Point(50, 33);
+            this.tbLOWSpinup.Name = "tbLOWSpinup";
+            this.tbLOWSpinup.Size = new System.Drawing.Size(38, 22);
+            this.tbLOWSpinup.TabIndex = 33;
+            this.tbLOWSpinup.Text = "1200";
+            this.tbLOWSpinup.TextChanged += new System.EventHandler(this.tbSpinup_TextChanged);
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.Location = new System.Drawing.Point(94, 15);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(38, 16);
+            this.label6.TabIndex = 32;
+            this.label6.Text = "MED";
+            this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.Location = new System.Drawing.Point(137, 15);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(41, 16);
+            this.label5.TabIndex = 31;
+            this.label5.Text = "HIGH";
+            this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Location = new System.Drawing.Point(50, 15);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(38, 16);
+            this.label4.TabIndex = 30;
+            this.label4.Text = "LOW";
+            this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // lnkNewVersion
+            // 
+            this.lnkNewVersion.AutoSize = true;
+            this.lnkNewVersion.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lnkNewVersion.Location = new System.Drawing.Point(108, 933);
+            this.lnkNewVersion.Name = "lnkNewVersion";
+            this.lnkNewVersion.Size = new System.Drawing.Size(51, 16);
+            this.lnkNewVersion.TabIndex = 36;
+            this.lnkNewVersion.TabStop = true;
+            this.lnkNewVersion.Text = "vX.X.X";
+            this.lnkNewVersion.Visible = false;
+            this.lnkNewVersion.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkNewVersion_LinkClicked);
+            // 
+            // lblNewVersion
+            // 
+            this.lblNewVersion.AutoSize = true;
+            this.lblNewVersion.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblNewVersion.ForeColor = System.Drawing.Color.Green;
+            this.lblNewVersion.Location = new System.Drawing.Point(9, 933);
+            this.lblNewVersion.Name = "lblNewVersion";
+            this.lblNewVersion.Size = new System.Drawing.Size(99, 16);
+            this.lblNewVersion.TabIndex = 35;
+            this.lblNewVersion.Text = "New Version:";
+            this.lblNewVersion.Visible = false;
             // 
             // WindTrackCreator
             // 
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(547, 911);
+            this.ClientSize = new System.Drawing.Size(547, 961);
+            this.Controls.Add(this.lnkNewVersion);
+            this.Controls.Add(this.lblNewVersion);
+            this.Controls.Add(this.gbOffsets);
             this.Controls.Add(this.btnFingerprint);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.tbSpindown);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.tbSpinup);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.rbUHD);
             this.Controls.Add(this.rbBluray);
@@ -620,6 +735,8 @@
             this.panel1.PerformLayout();
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
+            this.gbOffsets.ResumeLayout(false);
+            this.gbOffsets.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -662,15 +779,24 @@
         private System.Windows.Forms.RadioButton rbUHD;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox tbSpinup;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox tbSpindown;
+        private System.Windows.Forms.TextBox tbECOSpinup;
         private System.Windows.Forms.Button btnFingerprint;
         private System.Windows.Forms.MenuStrip menuStrip;
         private System.Windows.Forms.ToolStripMenuItem toolsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem addOffsetToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveAsToolStripMenuItem;
+        private System.Windows.Forms.GroupBox gbOffsets;
+        private System.Windows.Forms.TextBox tbHIGHSpinup;
+        private System.Windows.Forms.TextBox tbMEDSpinup;
+        private System.Windows.Forms.TextBox tbLOWSpinup;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox tbSpindown;
+        private System.Windows.Forms.LinkLabel lnkNewVersion;
+        private System.Windows.Forms.Label lblNewVersion;
     }
 }
 
