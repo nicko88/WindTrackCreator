@@ -29,11 +29,10 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WindTrackCreator));
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.btnOpen = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
@@ -88,6 +87,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.lnkNewVersion = new System.Windows.Forms.LinkLabel();
             this.lblNewVersion = new System.Windows.Forms.Label();
+            this.customCommandsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.gvCodes)).BeginInit();
             this.panel1.SuspendLayout();
             this.menuStrip.SuspendLayout();
@@ -152,28 +152,28 @@
             this.gvCodes.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.gvCodes.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.BackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.gvCodes.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
             this.gvCodes.ColumnHeadersHeight = 25;
             this.gvCodes.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.TimeCode,
             this.FanSpeed,
             this.Seek,
             this.Delete});
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.gvCodes.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle8.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.gvCodes.DefaultCellStyle = dataGridViewCellStyle8;
             this.gvCodes.EnableHeadersVisualStyles = false;
             this.gvCodes.Location = new System.Drawing.Point(12, 223);
             this.gvCodes.MultiSelect = false;
@@ -201,9 +201,9 @@
             // Seek
             // 
             this.Seek.DataPropertyName = "Seek";
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle2.NullValue = "Seek";
-            this.Seek.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle6.NullValue = "Seek";
+            this.Seek.DefaultCellStyle = dataGridViewCellStyle6;
             this.Seek.HeaderText = "Jump To Time";
             this.Seek.Name = "Seek";
             this.Seek.Text = "Seek";
@@ -212,9 +212,9 @@
             // Delete
             // 
             this.Delete.DataPropertyName = "Delete";
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle3.NullValue = "Delete";
-            this.Delete.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle7.NullValue = "Delete";
+            this.Delete.DefaultCellStyle = dataGridViewCellStyle7;
             this.Delete.HeaderText = "Delete";
             this.Delete.Name = "Delete";
             this.Delete.Text = "Delete";
@@ -538,13 +538,14 @@
             // saveAsToolStripMenuItem
             // 
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.saveAsToolStripMenuItem.Text = "Save As...";
             this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
             // 
             // toolsToolStripMenuItem
             // 
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.customCommandsToolStripMenuItem,
             this.addOffsetToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(51, 21);
@@ -553,7 +554,7 @@
             // addOffsetToolStripMenuItem
             // 
             this.addOffsetToolStripMenuItem.Name = "addOffsetToolStripMenuItem";
-            this.addOffsetToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+            this.addOffsetToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
             this.addOffsetToolStripMenuItem.Text = "Apply an Offset";
             this.addOffsetToolStripMenuItem.Click += new System.EventHandler(this.addOffsetToolStripMenuItem_Click);
             // 
@@ -685,6 +686,13 @@
             this.lblNewVersion.Text = "New Version:";
             this.lblNewVersion.Visible = false;
             // 
+            // customCommandsToolStripMenuItem
+            // 
+            this.customCommandsToolStripMenuItem.Name = "customCommandsToolStripMenuItem";
+            this.customCommandsToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.customCommandsToolStripMenuItem.Text = "Custom Commands";
+            this.customCommandsToolStripMenuItem.Click += new System.EventHandler(this.customCommandsToolStripMenuItem_Click);
+            // 
             // WindTrackCreator
             // 
             this.AllowDrop = true;
@@ -721,7 +729,6 @@
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.btnOpen);
             this.Controls.Add(this.menuStrip);
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip;
             this.Name = "WindTrackCreator";
             this.Text = "Wind Track Creator";
@@ -797,6 +804,7 @@
         private System.Windows.Forms.TextBox tbSpindown;
         private System.Windows.Forms.LinkLabel lnkNewVersion;
         private System.Windows.Forms.Label lblNewVersion;
+        private System.Windows.Forms.ToolStripMenuItem customCommandsToolStripMenuItem;
     }
 }
 

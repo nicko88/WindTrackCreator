@@ -8,13 +8,13 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using WindTrackCreator.Forms;
 
 namespace WindTrackCreator
 {
@@ -38,12 +38,15 @@ namespace WindTrackCreator
         private Color _gvHeaderBackColor;
         private FlatStyle _gvBtnStyle;
 
+        CustomCommands _customCommands;
+
         public WindTrackCreator()
         {
             Util.ConfigHelper.EnableMPCBEWebAPI();
             Util.ConfigHelper.EnableMPCBEChapterMarkers();
 
             InitializeComponent();
+            Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
 
             SaveDefaultColor();
 
@@ -241,7 +244,7 @@ namespace WindTrackCreator
                         break;
                 }
 
-                AddCode(fanSpeed);
+                AddCode(fanSpeed, 0);
                 gvCodes.Sort(gvCodes.Columns["TimeCode"], ListSortDirection.Ascending);
             }
 
@@ -277,9 +280,9 @@ namespace WindTrackCreator
             }
         }
 
-        private void AddCode(string fanSpeed)
+        public void AddCode(string command, long offset)
         {
-            string time = GetTime(true);
+            string time = GetTime(true, offset);
             if (!string.IsNullOrEmpty(time))
             {
                 DataTable dT = (DataTable)gvCodes.DataSource;
@@ -292,7 +295,7 @@ namespace WindTrackCreator
                     }
                 }
 
-                dT.Rows.Add(time, fanSpeed, "Seek", "Delete");
+                dT.Rows.Add(time, command, "Seek", "Delete");
 
                 for(int i = 0; i < gvCodes.Rows.Count; i++)
                 {
@@ -318,7 +321,7 @@ namespace WindTrackCreator
             UpdateCodeCount();
         }
 
-        private string GetTime(bool showError)
+        private string GetTime(bool showError, long offset)
         {
             if (rbMPC.Checked)
             {
@@ -334,7 +337,7 @@ namespace WindTrackCreator
                     doc.LoadHtml(html);
 
                     string position = doc.GetElementbyId("position").InnerText;
-                    long positionMS = Int64.Parse(position);
+                    long positionMS = Int64.Parse(position) + offset;
 
                     string filename = doc.GetElementbyId("file").InnerText;
                     FileInfo file = new FileInfo(filename);
@@ -386,7 +389,7 @@ namespace WindTrackCreator
                     long seconds = Convert.ToInt64(time["result"]["time"]["seconds"]);
                     long milliseconds = Convert.ToInt64(time["result"]["time"]["milliseconds"]);
 
-                    long positionMS = (hours * 3600000) + (minutes * 60000) + (seconds * 1000) + milliseconds;
+                    long positionMS = (hours * 3600000) + (minutes * 60000) + (seconds * 1000) + milliseconds + offset;
 
                     JObject fileinfo = JObject.Parse(filenameJSONResponse);
                     string filepath = (string)fileinfo["result"]["item"]["file"];
@@ -536,7 +539,7 @@ namespace WindTrackCreator
 
         private void btnFillHeader_Click(object sender, EventArgs e)
         {
-            string time = GetTime(true);
+            string time = GetTime(true, 0);
 
             if(time != null)
             {
@@ -696,50 +699,53 @@ namespace WindTrackCreator
                         double time = TimeSpan.Parse(row.Cells["TimeCode"].Value.ToString()).TotalMilliseconds;
                         string CMD = row.Cells["FanSpeed"].Value.ToString();
 
-                        if (prevCMD == "OFF")
+                        if (CMD == "OFF" || CMD == "ECO" || CMD == "LOW" || CMD == "MED" || CMD == "HIGH")
                         {
-                            if (CMD == "ECO" && time - prevTime < ECOSpinup + 500)
+                            if (prevCMD == "OFF")
                             {
-                                row.DefaultCellStyle.BackColor = Color.FromArgb(255, 255, 128);
+                                if (CMD == "ECO" && time - prevTime < ECOSpinup + 500)
+                                {
+                                    row.DefaultCellStyle.BackColor = Color.FromArgb(255, 255, 128);
+                                    row.DefaultCellStyle.ForeColor = Color.Black;
+                                }
+
+                                if (CMD == "LOW" && time - prevTime < LOWSpinup + 500)
+                                {
+                                    row.DefaultCellStyle.BackColor = Color.FromArgb(255, 255, 128);
+                                    row.DefaultCellStyle.ForeColor = Color.Black;
+                                }
+
+                                if (CMD == "MED" && time - prevTime < MEDSpinup + 500)
+                                {
+                                    row.DefaultCellStyle.BackColor = Color.FromArgb(255, 255, 128);
+                                    row.DefaultCellStyle.ForeColor = Color.Black;
+                                }
+
+                                if (CMD == "HIGH" && time - prevTime < HIGHSpinup + 500)
+                                {
+                                    row.DefaultCellStyle.BackColor = Color.FromArgb(255, 255, 128);
+                                    row.DefaultCellStyle.ForeColor = Color.Black;
+                                }
+                            }
+
+                            if (CMD == "OFF")
+                            {
+                                if (time - prevTime < spindown + 500)
+                                {
+                                    row.DefaultCellStyle.BackColor = Color.FromArgb(255, 255, 128);
+                                    row.DefaultCellStyle.ForeColor = Color.Black;
+                                }
+                            }
+
+                            if (time - prevTime < 500)
+                            {
+                                row.DefaultCellStyle.BackColor = Color.FromArgb(255, 128, 128);
                                 row.DefaultCellStyle.ForeColor = Color.Black;
                             }
 
-                            if (CMD == "LOW" && time - prevTime < LOWSpinup + 500)
-                            {
-                                row.DefaultCellStyle.BackColor = Color.FromArgb(255, 255, 128);
-                                row.DefaultCellStyle.ForeColor = Color.Black;
-                            }
-
-                            if (CMD == "MED" && time - prevTime < MEDSpinup + 500)
-                            {
-                                row.DefaultCellStyle.BackColor = Color.FromArgb(255, 255, 128);
-                                row.DefaultCellStyle.ForeColor = Color.Black;
-                            }
-
-                            if (CMD == "HIGH" && time - prevTime < HIGHSpinup + 500)
-                            {
-                                row.DefaultCellStyle.BackColor = Color.FromArgb(255, 255, 128);
-                                row.DefaultCellStyle.ForeColor = Color.Black;
-                            }
+                            prevCMD = CMD;
+                            prevTime = time;
                         }
-
-                        if (CMD == "OFF")
-                        {
-                            if (time - prevTime < spindown + 500)
-                            {
-                                row.DefaultCellStyle.BackColor = Color.FromArgb(255, 255, 128);
-                                row.DefaultCellStyle.ForeColor = Color.Black;
-                            }
-                        }
-
-                        if (time - prevTime < 500)
-                        {
-                            row.DefaultCellStyle.BackColor = Color.FromArgb(255, 128, 128);
-                            row.DefaultCellStyle.ForeColor = Color.Black;
-                        }
-
-                        prevCMD = CMD;
-                        prevTime = time;
                     }
                 }
                 catch { }
@@ -806,7 +812,7 @@ namespace WindTrackCreator
         private void btnCMD_Click(object sender, EventArgs e)
         {
             Button btn = (Button)sender;
-            AddCode(btn.Tag.ToString());
+            AddCode(btn.Tag.ToString(), 0);
         }
 
         private void gvCodes_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
@@ -835,6 +841,10 @@ namespace WindTrackCreator
                 key.SetValue("DarkMode", true);
 
                 SetDarkMode();
+                if (_customCommands != null)
+                {
+                    _customCommands.SetDarkMode();
+                }
             }
             else
             {
@@ -842,6 +852,10 @@ namespace WindTrackCreator
                 key.DeleteValue("DarkMode", false);
 
                 SetLightMode();
+                if (_customCommands != null)
+                {
+                    _customCommands.SetLightMode();
+                }
             }
 
             ColorGrid();
@@ -917,7 +931,7 @@ namespace WindTrackCreator
         {
             try
             {
-                GetTime(false);
+                GetTime(false, 0);
             }
             catch { }
 
@@ -953,7 +967,7 @@ namespace WindTrackCreator
 
             List<string> errorCodes = new List<string>();
 
-            Forms.AddOffset offset = new Forms.AddOffset($"{tbIP.Text}:{tbPort.Text}");
+            AddOffset offset = new AddOffset($"{tbIP.Text}:{tbPort.Text}");
             DialogResult offestResult = offset.ShowDialog();
 
             if (offestResult == DialogResult.OK)
@@ -1165,6 +1179,17 @@ namespace WindTrackCreator
         private void lnkNewVersion_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             Process.Start($"https://github.com/nicko88/WindTrackCreator/releases/latest");
+        }
+
+        private void customCommandsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _customCommands = new CustomCommands(this);
+            _customCommands.Show();
+
+            if(cbDarkmode.Checked)
+            {
+                _customCommands.SetDarkMode();
+            }
         }
     }
 }
