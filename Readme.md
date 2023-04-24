@@ -1,3 +1,5 @@
+## [Download latest release](https://github.com/nicko88/WindTrackCreator/releases/latest)
+
 # WindTrackCreator
 #### Create wind track files for [HTFanControl](https://github.com/nicko88/HTFanControl)
 
